@@ -226,4 +226,8 @@
     <string name="min_printer_summary">Printer Connections</string>
     <string name="min_nfc_summary">NFC Connections</string>
     <string name="min_cast_summary">Cast Connections</string>
+
+    <!-- Battery stats reset -->
+    <string name="battery_stats_reset">Reset stats</string>
+    <string name="battery_stats_message">Battery history stats are going to be reset</string>
 </resources>

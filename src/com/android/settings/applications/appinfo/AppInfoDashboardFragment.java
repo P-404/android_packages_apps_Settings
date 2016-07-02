@@ -61,6 +61,7 @@ import com.android.settings.applications.specialaccess.pictureinpicture.PictureI
 import com.android.settings.core.SubSettingLauncher;
 import com.android.settings.dashboard.DashboardFragment;
 import com.android.settingslib.RestrictedLockUtilsInternal;
+import com.android.settingslib.Utils;
 import com.android.settingslib.applications.AppUtils;
 import com.android.settingslib.applications.ApplicationsState;
 import com.android.settingslib.applications.ApplicationsState.AppEntry;
@@ -93,6 +94,7 @@ public class AppInfoDashboardFragment extends DashboardFragment
     static final int UNINSTALL_UPDATES = 2;
     static final int INSTALL_INSTANT_APP_MENU = 3;
     static final int ACCESS_RESTRICTED_SETTINGS = 4;
+    static final int OPEN_PLAY_STORE = 5;
 
     // Result code identifiers
     @VisibleForTesting
@@ -401,6 +403,10 @@ public class AppInfoDashboardFragment extends DashboardFragment
         menu.add(0, ACCESS_RESTRICTED_SETTINGS, 0,
                 R.string.app_restricted_settings_lockscreen_title)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        menu.add(0, OPEN_PLAY_STORE, 0,
+                R.string.app_play_store)
+                .setIcon(R.drawable.ic_play_store)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     }
 
     @Override
@@ -423,6 +429,11 @@ public class AppInfoDashboardFragment extends DashboardFragment
             RestrictedLockUtilsInternal.setMenuItemAsDisabledByAdmin(getActivity(),
                     uninstallUpdatesItem, mAppsControlDisallowedAdmin);
         }
+        // Utils.isSystemPackage doesn't include all aosp built apps, like Contacts etc.
+        // Add them and grab the Google Play Store itself in the process
+        menu.findItem(OPEN_PLAY_STORE).setVisible(
+            !Utils.isSystemPackage(getContext().getResources(), mPm, mPackageInfo)
+            && !isAospOrStore(mAppEntry.info.packageName));
     }
 
     private static void showLockScreen(Context context, Runnable successRunnable) {
@@ -488,6 +499,9 @@ public class AppInfoDashboardFragment extends DashboardFragment
                             mAppEntry.label);
                     Toast.makeText(getContext(), toastString, Toast.LENGTH_LONG).show();
                 });
+                return true;
+            case OPEN_PLAY_STORE:
+                openPlayStore(mAppEntry.info.packageName);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -598,6 +612,17 @@ public class AppInfoDashboardFragment extends DashboardFragment
     @Override
     protected boolean shouldSkipForInitialSUW() {
         return true;
+    }
+
+    private void openPlayStore(String packageName) {
+        String playURL = "https://play.google.com/store/apps/details?id=" + packageName;
+        Intent playStorePage = new Intent(Intent.ACTION_VIEW);
+        playStorePage.setData(Uri.parse(playURL));
+        startActivity(playStorePage);
+    }
+
+    private boolean isAospOrStore(String packageName) {
+        return packageName.contains("com.android");
     }
 
     private void uninstallPkg(String packageName, boolean allUsers, boolean andDisable) {

@@ -158,4 +158,8 @@
     <string name="qs_battery_percentage_title">QS battery percentage</string>
     <string name="qs_battery_percentage_summary">Show battery percentage in the QS header instead of battery estimate</string>
 
+    <!-- Signature spoofing -->
+    <string name="signature_spoofing_title">Allow signature spoofing</string>
+    <string name="signature_spoofing_summary">Enables signature spoofing for micorG</string>
+
 </resources>

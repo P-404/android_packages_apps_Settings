@@ -235,4 +235,8 @@
     <string name="network_traffic_refresh_interval_summary">Duration after which speed is remeasured</string>
     <string name="unit_seconds">seconds</string>
 
+    <!-- Signature spoofing -->
+    <string name="signature_spoofing_title">Allow signature spoofing</string>
+    <string name="signature_spoofing_summary">Enables signature spoofing for micorG</string>
+
 </resources>

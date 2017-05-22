@@ -45,6 +45,12 @@
             android:key="system_server_heap_dump"
             android:title="@string/capture_system_heap_dump_title" />
 
+        <com.p404.support.preferences.GlobalSettingSwitchPreference
+            android:key="signature_spoofing"
+            android:title="@string/signature_spoofing_title"
+            android:summary="@string/signature_spoofing_summary"
+            android:defaultValue="false" />
+
         <Preference
             android:key="local_backup_password"
             android:title="@string/local_backup_password_title"

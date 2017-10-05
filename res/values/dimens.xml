@@ -498,4 +498,7 @@
     <dimen name="qrcode_preview_margin">40dp</dimen>
     <dimen name="qrcode_preview_radius">30dp</dimen>
     <dimen name="qrcode_icon_size">27dp</dimen>
+     
+     <!-- Support -->
+    <dimen name="two_target_min_width">72dp</dimen>
 </resources>

@@ -12290,4 +12290,6 @@
     <string name="nr_nsa_sa">NSA + SA</string>
     <string name="nr_nsa">NSA</string>
     <string name="nr_sa">SA</string>
+    <!-- Manage applications, package string displayed in app snippet -->
+    <string name="packagename_text"><xliff:g id="package_name">%1$s</xliff:g></string>
 </resources>

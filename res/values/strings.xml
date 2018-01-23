@@ -12246,4 +12246,6 @@
     <string name="media_controls_no_players">No players available</string>
     <!-- Keywords for the media controls setting [CHAR LIMIT=NONE]-->
     <string name="keywords_media_controls">media</string>
+    <!-- Manage applications, package string displayed in app snippet -->
+    <string name="packagename_text"><xliff:g id="package_name">%1$s</xliff:g></string>
 </resources>

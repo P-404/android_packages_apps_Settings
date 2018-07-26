@@ -520,7 +520,11 @@ public class TetherSettings extends RestrictedSettingsFragment
             mBluetoothPan.set((BluetoothPan) proxy);
         }
         public void onServiceDisconnected(int profile) {
-            mBluetoothPan.set(null);
+            BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+            BluetoothProfile currentProfile = mBluetoothPan.getAndSet(null);
+            if (currentProfile != null && adapter != null) {
+                adapter.closeProfileProxy(BluetoothProfile.PAN, currentProfile);
+            }
         }
     };
 

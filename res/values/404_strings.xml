@@ -179,4 +179,9 @@
     <string name="torch_power_button_gesture_dt">Double tap power to toggle torch</string>
     <string name="torch_power_button_gesture_lp">Long press power to toggle torch</string>
 
+    <!-- Doze on double tap -->
+    <string name="double_tap_title">Double tap</string>
+    <string name="doze_double_tap_title">Double tap to check phone</string>
+    <string name="doze_double_tap_summary">Pulse notifications by a double tap</string>
+
 </resources>

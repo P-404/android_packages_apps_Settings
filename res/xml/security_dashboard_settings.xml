@@ -31,6 +31,15 @@
         android:order="1"
         android:key="dashboard_tile_placeholder" />
 
+    <!-- SELinux -->
+    <Preference
+        android:key="selinux_status"
+        android:title="@string/selinux_status"
+        android:summary="@string/summary_placeholder"
+        settings:enableCopying="false"
+        android:selectable="false"
+        settings:controller="com.android.settings.deviceinfo.firmwareversion.SelinuxStatusPreferenceController"/>
+
     <!-- security section -->
     <PreferenceCategory
         android:order="10"

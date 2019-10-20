@@ -118,12 +118,21 @@
         android:dialogLayout="@layout/private_dns_mode_dialog"
         android:positiveButtonText="@string/save"
         android:negativeButtonText="@android:string/cancel" />
-
+    
+    <com.p404.support.preferences.SystemSettingMasterSwitchPreference
+            android:key="network_traffic_state"
+            android:title="@string/network_traffic_state_title"
+            android:summary="@string/network_traffic_state_summary"
+            android:icon="@drawable/ic_settings_network_traffic"
+            android:order="25"
+            android:fragment="com.android.settings.p404.fragments.NetworkTraffic"
+            android:defaultValue="false" />
+        
     <Preference
         android:fragment="com.android.settings.network.AdaptiveConnectivitySettings"
         android:key="adaptive_connectivity"
         android:title="@string/adaptive_connectivity_title"
         android:summary="@string/summary_placeholder"
-        android:order="25"
+        android:order="30"
         settings:controller="com.android.settings.network.AdaptiveConnectivityPreferenceController"/>
 </PreferenceScreen>

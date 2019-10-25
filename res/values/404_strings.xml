@@ -303,4 +303,6 @@
     <string name="data_usage_daily">Daily</string>
     <string name="data_usage_monthly">Monthly</string>
 
+    <!-- String for removal of sensitive info on about, depending on tap -->
+    <string name="device_info_protected_single_press">Tap to show info</string>
 </resources>

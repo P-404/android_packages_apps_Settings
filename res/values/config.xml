@@ -665,4 +665,7 @@
     <!-- Control messages displayed during enrollment -->
     <bool name="enrollment_message_display_controller_flag">false</bool>
 
+    <!-- Whether the given language capitalizes nouns -->
+    <bool name="language_capitalizes_nouns">false</bool>
+
 </resources>

@@ -38,6 +38,7 @@
             android:key="gesture_power_menu_long_press_for_assistant"
             android:title="@string/power_menu_long_press_for_assistant_title"
             settings:controller="com.android.settings.gestures.LongPressPowerForAssistantPreferenceController"/>
+
     </PreferenceCategory>
 
     <com.android.settings.widget.LabeledSeekBarPreference
@@ -49,6 +50,12 @@
         settings:textEnd="@string/power_menu_long_press_for_assist_sensitivity_high_label"
         settings:controller="com.android.settings.gestures.LongPressPowerSensitivityPreferenceController"
     />
+
+    <com.p404.support.preferences.SecureSettingSwitchPreference
+        android:key="advanced_reboot"
+        android:title="@string/global_actions_advanced_reboot_title"
+        android:summary="@string/global_actions_advanced_reboot_summary"
+        android:defaultValue="false" />
 
     <com.android.settingslib.widget.FooterPreference
         android:key="power_menu_power_volume_up_hint"

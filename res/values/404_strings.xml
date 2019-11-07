@@ -22,4 +22,8 @@
 
     <!-- PLatform version in About phone -->
     <string name="platform_version">Platform version</string>
+
+    <!-- Three-fingers-swipe to screenshot -->
+    <string name="three_finger_gesture">Swipe to screenshot</string>
+    <string name="three_finger_gesture_summary">Swipe down with three fingers to take a screenshot</string>
 </resources>

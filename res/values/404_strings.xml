@@ -75,4 +75,7 @@
     <string name="security_settings_fingerprint_sensor_location_left">left side</string>
     <string name="security_settings_fingerprint_sensor_location_right">right side</string>
 
+    <!-- Three-fingers-swipe to screenshot -->
+    <string name="three_finger_gesture">Swipe to screenshot</string>
+    <string name="three_finger_gesture_summary">Swipe down with three fingers to take a screenshot</string>
 </resources>

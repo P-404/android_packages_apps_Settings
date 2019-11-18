@@ -156,4 +156,7 @@
     <!-- Manage applications, package string displayed in app snippet -->
     <string name="packagename_text">"<xliff:g id="package_name">%1$s</xliff:g>"</string>
 
+    <!-- Lockscreen media blur -->
+    <string name="lockscreen_media_blur_title">Livello blur media art lockscreen</string>
+
 </resources>

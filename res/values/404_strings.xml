@@ -80,7 +80,10 @@
      <string name="notification_sound_vib_screen_on_title">Notification sound while screen is on</string>
      <string name="notification_sound_vib_screen_on_summary">Play sound and vibration for notifications when the screen is on</string>
 
-    <!-- App details: open play store link if app is user installed -->
-    <string name="app_play_store">Google Play</string>
+     <!-- App details: open play store link if app is user installed -->
+     <string name="app_play_store">Google Play</string>
+
+     <!-- Screen shutter sound -->
+     <string name="screenshot_sound_title">Screenshot sound</string>
 
 </resources>

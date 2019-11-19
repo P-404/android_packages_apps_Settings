@@ -162,4 +162,9 @@
     <string name="min_refresh_rate_title">Minimum Refresh-Rate</string>
     <string name="max_refresh_rate_title">Maximum Refresh-Rate</string>
     <string name="refresh_rate_placeholder"><xliff:g id="refresh_rate" example="60">%1$s</xliff:g> Hz</string>
+
+    <!-- Ambient Options -->
+    <string name="lockscreen_ambient_category_title">Ambient Settings Customizations</string>
+    <string name="doze_on_charge_title">Always on when charging</string>
+    <string name="doze_on_charge_summary">Show doze screen all the time when charging</string>
 </resources>

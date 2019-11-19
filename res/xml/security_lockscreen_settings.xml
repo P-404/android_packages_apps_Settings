@@ -80,13 +80,6 @@
         android:title="@string/ambient_display_category_triggers"
         android:order="1000">
 
-        <com.android.settingslib.RestrictedSwitchPreference
-            android:key="ambient_display_always_on"
-            android:title="@string/doze_always_on_title"
-            android:summary="@string/doze_always_on_summary"
-            settings:controller="com.android.settings.display.AmbientDisplayAlwaysOnPreferenceController"
-            settings:userRestriction="no_ambient_display" />
-
         <Preference
             android:key="ambient_display_tap"
             android:title="@string/ambient_display_tap_screen_title"
@@ -137,9 +130,31 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:key="lockscreen_ambient_options"
+        android:title="@string/lockscreen_ambient_category_title"
+        android:order="1002">
+
+        <!-- Always On Display -->
+        <com.android.settingslib.RestrictedSwitchPreference
+            android:key="ambient_display_always_on"
+            android:title="@string/doze_always_on_title"
+            android:summary="@string/doze_always_on_summary"
+            settings:controller="com.android.settings.display.AmbientDisplayAlwaysOnPreferenceController"
+            settings:userRestriction="no_ambient_display" />
+
+        <!-- AOD on charge -->
+        <com.p404.support.preferences.SystemSettingSwitchPreference
+            android:key="doze_on_charge"
+            android:defaultValue="false"
+            android:title="@string/doze_on_charge_title"
+            android:summary="@string/doze_on_charge_summary" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:key="lockscreen_media_art_options"
         android:title="@string/lockscreen_media_art_category_title"
-        android:order="1002">
+        android:order="1003">
 
         <com.p404.support.preferences.SystemSettingSwitchPreference
             android:key="show_lockscreen_media_art"

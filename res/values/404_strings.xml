@@ -157,6 +157,8 @@
     <string name="packagename_text">"<xliff:g id="package_name">%1$s</xliff:g>"</string>
 
     <!-- Lockscreen media blur -->
-    <string name="lockscreen_media_blur_title">Livello blur media art lockscreen</string>
+    <string name="lockscreen_media_blur_title">Media art blur level</string>
+    <string name="show_lockscreen_media_art_title">Show media art</string>
+    <string name="lockscreen_media_art_options_title">Lockscreen media art</string>
 
 </resources>

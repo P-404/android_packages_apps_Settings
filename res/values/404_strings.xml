@@ -162,4 +162,8 @@
     <string name="volume_panel_compact_val">co.potatoproject.plugin.volume.compact</string>
     <string name="volume_panel_tiled_val">co.potatoproject.plugin.volume.tiled</string>
 
+    <!-- AOD on charge -->
+    <string name="doze_on_charge_title">Always On when charging</string>
+    <string name="doze_on_charge_summary">Show Always On Ambient display when charging</string>
+
 </resources>

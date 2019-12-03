@@ -76,4 +76,8 @@
      <string name="ambient_display_always_title">Always</string>
      <string name="ambient_display_screen_summary">Show time, notification icons, and other info</string>
 
+     <!-- Suppress notification sounds while screen on -->
+     <string name="notification_sound_vib_screen_on_title">Notification sound while screen is on</string>
+     <string name="notification_sound_vib_screen_on_summary">Play sound and vibration for notifications when the screen is on</string>
+
 </resources>

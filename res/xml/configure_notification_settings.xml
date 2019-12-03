@@ -86,6 +86,12 @@
         android:order="15"
         settings:initialExpandedChildrenCount="0">
 
+        <com.p404.support.preference.SystemSettingSwitchPreference
+            android:key="notification_sound_vib_screen_on"
+            android:title="@string/notification_sound_vib_screen_on_title"
+            android:summary="@string/notification_sound_vib_screen_on_summary"
+            android:defaultValue="true" />
+
         <SwitchPreference
             android:key="show_snooze_options"
             android:title="@string/snooze_options_title"

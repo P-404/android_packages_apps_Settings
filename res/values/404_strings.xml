@@ -66,4 +66,8 @@
      <string name="network_traffic_dynamic_summary">Autmotically switch between uplink and downlink</string>
      <string name="network_traffic_type">Select net activity type</string>
 
+     <!-- Pulse ambient display when new music track is played -->
+     <string name="pulse_on_new_tracks_title">Ambient music ticker</string>
+     <string name="pulse_on_new_tracks_summary">Wake screen when a new music track is played</string>
+
 </resources>

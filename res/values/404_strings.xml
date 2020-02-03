@@ -70,4 +70,10 @@
      <string name="pulse_on_new_tracks_title">Ambient music ticker</string>
      <string name="pulse_on_new_tracks_summary">Wake screen when a new music track is played</string>
 
+     <!-- Doze on charge -->
+     <string name="ambient_display_off_summary">Off</string>
+     <string name="ambient_display_on_charge_title">While charging</string>
+     <string name="ambient_display_always_title">Always</string>
+     <string name="ambient_display_screen_summary">Show time, notification icons, and other info</string>
+
 </resources>

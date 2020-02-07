@@ -3305,6 +3305,16 @@
                 android:value="com.android.settings.gestures.GlobalActionsPanelSettings" />
         </activity>
 
+        <activity android:name="Settings$AmbientDisplaySettingsActivity"
+            android:label="@string/ambient_display_screen_title">
+            <intent-filter>
+                <action android:name="com.android.settings.AMBIENT_DISPLAY_SETTINGS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data android:name="com.android.settings.FRAGMENT_CLASS"
+                android:value="com.android.settings.display.AmbientDisplaySettings" />
+        </activity>
+
         <!-- This is the longest AndroidManifest.xml ever. -->
     </application>
 </manifest>

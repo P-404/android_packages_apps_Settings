@@ -62,8 +62,8 @@
      <string name="net_monitor_category_title">Network traffic monitor</string>
      <string name="network_traffic_state_title">Show net activity in statusbar</string>
      <string name="network_traffic_autohide_threshold_title">Net activity autohide threshold (KB/s)</string>
-     <string name="network_traffic_arrow">Show arrows</string>
-     <string name="network_traffic_arrow_summary">Show the network traffic indicator arrows</string>
+     <string name="network_traffic_dynamic">Dynamic indicator</string>
+     <string name="network_traffic_dynamic_summary">Autmotically switch between uplink and downlink</string>
      <string name="network_traffic_type">Select net activity type</string>
 
 </resources>

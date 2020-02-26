@@ -147,4 +147,8 @@
     <string name="data_usage_app_restrict_wifi">Wi\u2011Fi data</string>
     <string name="data_usage_app_restrict_wifi_summary">Enable usage of Wi\u2011Fi data</string>
 
+    <!-- Night Display API strings -->
+    <string name="unknown_night_light_time">Unknown - press to update</string>
+    <string name="night_display_location_text">\n\nThe schedule from sunset to sunrise requires enabled location services to get the correct times for your location.</string>
+
 </resources>

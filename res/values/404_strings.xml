@@ -22,4 +22,7 @@
     <string name="P404_version_keywords">404 version</string>
     <string name="P404_build_number">404 build number</string>
 
+    <!-- Strings for suggestion card's close button [CHAR LIMIT=20] -->
+    <string name="suggestion_button_close">Close</string>
+
 </resources>

@@ -44,6 +44,8 @@ public class PanelFeatureProviderImpl implements PanelFeatureProvider {
                 return MobileDataPanel.create(context);
             case Settings.Panel.ACTION_BLUETOOTH:
                 return BluetoothPanel.create(context);
+            case Settings.Panel.ACTION_ZEN_MODE:
+                return ZenModePanel.create(context);
         }
 
         throw new IllegalStateException("No matching panel for: "  + panelType);

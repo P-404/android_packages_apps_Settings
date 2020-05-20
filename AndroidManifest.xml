@@ -1207,9 +1207,13 @@
             android:name="Settings$NotificationStationActivity"
             android:label="@string/notification_log_title"
             android:parentActivityName="Settings">
-            <intent-filter android:priority="22">
+            <intent-filter android:priority="32">
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.android.settings.SHORTCUT" />
+            </intent-filter>
+            <intent-filter android:priority="1">
+                <action android:name="android.settings.NOTIFICATION_HISTORY_FRAGMENT" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <meta-data android:name="com.android.settings.FRAGMENT_CLASS"
                 android:value="com.android.settings.notification.NotificationStation" />

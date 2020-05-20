@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (C) 2020 404 Project
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:settings="http://schemas.android.com/apk/res-auto"
+    android:key="P404_version_screen"
+    android:title="@string/P404_version"
+    settings:keywords="@string/P404_version_keywords">
+
+    <!-- 404 version -->
+    <Preference
+        android:key="P404_version"
+        android:title="@string/P404_version"
+        android:summary="@string/summary_placeholder"
+        settings:enableCopying="true"
+        settings:controller="com.android.settings.deviceinfo.firmwareversion.P404VersionDetailPreferenceController"/>
+
+    <!-- 404 Version Code -->
+    <Preference
+        android:key="P404_version_code"
+        android:title="@string/P404_version_code"
+        android:summary="@string/summary_placeholder"
+        settings:enableCopying="true"
+        settings:controller="com.android.settings.deviceinfo.firmwareversion.P404VersionCodePreferenceController"/>
+
+    <!-- 404 Build Number -->
+    <Preference
+        android:key="P404_build_number"
+        android:title="@string/P404_build_number"
+        android:summary="@string/summary_placeholder"
+        settings:enableCopying="true"
+        settings:controller="com.android.settings.deviceinfo.firmwareversion.P404BuildNumberPreferenceController"/>
+
+</PreferenceScreen>

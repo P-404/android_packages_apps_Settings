@@ -16,7 +16,10 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <!-- Project 404 version -->
-    <string name="404_version">Project 404 version</string>
+    <!-- 404 version -->
+    <string name="P404_version">404 version</string>
+    <string name="P404_version_code">404 version code</string>
+    <string name="P404_version_keywords">404 version</string>
+    <string name="P404_build_number">404 build number</string>
 
 </resources>

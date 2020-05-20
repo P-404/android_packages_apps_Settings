@@ -25,7 +25,9 @@ import com.android.settings.core.BasePreferenceController;
 public class P404VersionPreferenceController extends BasePreferenceController {
 
     @VisibleForTesting
-    private static final String P404_VERSION_PROP = "ro.P404.version";
+    private static final String P404_VERSION_PROP = "ro.404.version";
+    @VisibleForTesting
+    private static final String P404_VERSION_CODE_PROP = "ro.404.version_code";
 
     public P404VersionPreferenceController(Context context, String preferenceKey) {
         super(context, preferenceKey);
@@ -38,7 +40,11 @@ public class P404VersionPreferenceController extends BasePreferenceController {
 
     @Override
     public CharSequence getSummary() {
-        return SystemProperties.get(P404_VERSION_PROP,
-                mContext.getString(R.string.device_info_default));
+	    String P404Version = SystemProperties.get(P404_VERSION_PROP,
+			    mContext.getString(R.string.device_info_default));
+            String P404VersionCode = SystemProperties.get(P404_VERSION_CODE_PROP,
+			    mContext.getString(R.string.device_info_default));
+
+	    return P404VersionCode + P404Version;
     }
 }

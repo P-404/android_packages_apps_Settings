@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="wrap_content"
+	android:layout_width="match_parent"
+	android:orientation="vertical">
+
+	<ImageView
+		android:src="@drawable/p404_drw"
+		android:layout_height="124.7dp"
+		android:layout_width="wrap_content"
+		android:layout_gravity="center_horizontal"
+		android:layout_marginVertical="10dp"
+		android:adjustViewBounds="true"
+		android:scaleType="centerInside" />
+
+</LinearLayout>

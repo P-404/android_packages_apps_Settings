@@ -20,7 +20,13 @@
     xmlns:settings="http://schemas.android.com/apk/res-auto"
     android:key="firmware_version_screen"
     android:title="@string/firmware_version"
-    settings:keywords="@string/keywords_android_version">
+	settings:keywords="@string/keywords_android_version">
+
+	<!-- 404 Header -->
+	<com.android.settingslib.widget.LayoutPreference
+        android:key="P404_header"
+        android:layout="@layout/p404_header"
+		android:selectable="false"/>
 
     <!-- Android version -->
     <Preference

@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-package com.p404.support.preference;
+package com.p404.support.preferences;
 
 import android.content.Context;
 import android.util.AttributeSet;
 
-public class CustomSecureSeekBarPreference extends CustomSeekBarPreference {
+public class CustomSystemSeekBarPreference extends CustomSeekBarPreference {
 
-    public CustomSecureSeekBarPreference(Context context, AttributeSet attrs, int defStyle) {
+    public CustomSystemSeekBarPreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        setPreferenceDataStore(new SecureSettingsStore(context.getContentResolver()));
+        setPreferenceDataStore(new SystemSettingsStore(context.getContentResolver()));
     }
 
-    public CustomSecureSeekBarPreference(Context context, AttributeSet attrs) {
+    public CustomSystemSeekBarPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setPreferenceDataStore(new SecureSettingsStore(context.getContentResolver()));
+        setPreferenceDataStore(new SystemSettingsStore(context.getContentResolver()));
     }
 
-    public CustomSecureSeekBarPreference(Context context) {
+    public CustomSystemSeekBarPreference(Context context) {
         super(context, null);
-        setPreferenceDataStore(new SecureSettingsStore(context.getContentResolver()));
+        setPreferenceDataStore(new SystemSettingsStore(context.getContentResolver()));
     }
 }

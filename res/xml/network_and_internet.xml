@@ -102,11 +102,11 @@
         android:key="net_monitor_category"
         android:title="@string/net_monitor_category_title"
         android:order="25" >
-	<com.p404.support.preference.SystemSettingSwitchPreference
+	<com.p404.support.preferences.SystemSettingSwitchPreference
             android:key="network_traffic_state"
             android:title="@string/network_traffic_state_title"
             android:defaultValue="false" />
-	<com.p404.support.preference.CustomSystemSeekBarPreference
+	<com.p404.support.preferences.CustomSystemSeekBarPreference
             android:key="network_traffic_autohide_threshold"
             android:title="@string/network_traffic_autohide_threshold_title"
             android:max="10"
@@ -114,7 +114,7 @@
             android:defaultValue="1"
 	    android:dependency="network_traffic_state"
             settings:units="KB/s" />    
-	<com.p404.support.preference.SystemSettingSwitchPreference
+	<com.p404.support.preferences.SystemSettingSwitchPreference
             android:key="network_traffic_dynamic"
             android:title="@string/network_traffic_dynamic"
             android:summary="@string/network_traffic_dynamic_summary"

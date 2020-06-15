@@ -86,7 +86,7 @@
         android:order="15"
         settings:initialExpandedChildrenCount="0">
 
-        <com.p404.support.preference.SystemSettingSwitchPreference
+        <com.p404.support.preferences.SystemSettingSwitchPreference
             android:key="notification_sound_vib_screen_on"
             android:title="@string/notification_sound_vib_screen_on_title"
             android:summary="@string/notification_sound_vib_screen_on_summary"

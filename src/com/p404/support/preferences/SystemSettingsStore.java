@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.p404.support.preference;
+package com.p404.support.preferences;
 
 import android.content.ContentResolver;
 import android.preference.PreferenceDataStore;

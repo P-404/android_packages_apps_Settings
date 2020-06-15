@@ -20,7 +20,7 @@
     android:key="qs_column_rows_settings_screen"
     android:title="@string/qs_column_rows_settings_title">
 
-    <com.p404.support.preference.SystemSettingSwitchPreference
+    <com.p404.support.preferences.SystemSettingSwitchPreference
         android:key="qs_tile_title_visibility"
         android:title="@string/qs_tile_title_visibility_title"
         android:defaultValue="true" />
@@ -28,7 +28,7 @@
     <PreferenceCategory
         android:key="qs_columns_rows_category"
         android:title="@string/qs_columns_rows_category_title" >
-        <com.p404.support.preference.CustomSystemSeekBarPreference
+        <com.p404.support.preferences.CustomSystemSeekBarPreference
             android:key="qs_rows_portrait"
             android:title="@string/qs_rows_portrait_title"
             android:max="5"
@@ -36,7 +36,7 @@
             android:defaultValue="3"
             settings:units="" />
 
-        <com.p404.support.preference.CustomSystemSeekBarPreference
+        <com.p404.support.preferences.CustomSystemSeekBarPreference
             android:key="qs_rows_landscape"
             android:title="@string/qs_rows_landscape_title"
             android:max="5"
@@ -44,7 +44,7 @@
             android:defaultValue="1"
             settings:units="" />
 
-        <com.p404.support.preference.CustomSystemSeekBarPreference
+        <com.p404.support.preferences.CustomSystemSeekBarPreference
             android:key="qs_columns_portrait"
             android:title="@string/qs_columns_portrait_title"
             android:max="7"
@@ -52,7 +52,7 @@
             android:defaultValue="4"
             settings:units="" />
 
-        <com.p404.support.preference.CustomSystemSeekBarPreference
+        <com.p404.support.preferences.CustomSystemSeekBarPreference
             android:key="qs_columns_landscape"
             android:title="@string/qs_columns_landscape_title"
             android:max="9"

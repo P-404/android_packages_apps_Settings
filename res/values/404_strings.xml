@@ -298,4 +298,9 @@
     <string name="sucess_vib_title">Authentication vibration</string>
     <string name="sucess_vib_summary">Haptic feedback for fingerprint and face authentication when successful</string>
 
+    <!-- Data usage -->
+    <string name="data_usage_period">Data usage period</string>
+    <string name="data_usage_daily">Daily</string>
+    <string name="data_usage_monthly">Monthly</string>
+
 </resources>

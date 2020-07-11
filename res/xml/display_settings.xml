@@ -154,6 +154,14 @@
             android:fragment="com.android.settings.dream.DreamSettings"
             settings:keywords="@string/keywords_screensaver"/>
 
+        <!-- Statusbar Icon Manager -->
+        <Preference
+            android:key="icon_manager"
+            android:title="@string/icon_manager_title"
+            android:summary="@string/icon_manager_summary">
+            <intent android:action="com.android.settings.action.STATUS_BAR_TUNER" />
+        </Preference>
+
         <SwitchPreference
             android:key="camera_gesture"
             android:title="@string/camera_gesture_title"

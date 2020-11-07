@@ -283,4 +283,8 @@
     <!-- Hotspot Client -->
     <string name="wifi_tether_client_list_title">Client List</string>
     <string name="wifi_tether_client_list_summary">Manage clients connected to hotspot</string>
+
+    <!-- Lock screen cover art -->
+    <string name="lockscreen_media_art_title">Lockscreen media art</string>
+    <string name="lockscreen_media_art_summary">Display media cover art when playing music</string>
 </resources>

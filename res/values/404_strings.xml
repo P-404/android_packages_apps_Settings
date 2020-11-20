@@ -31,4 +31,9 @@
 
    <!-- Warning message displayed if user choses not to validate the EAP server -->
     <string name="wifi_do_not_validate_eap_server_warning">No certificate specified. Your connection will not be private.</string>
+
+    <!-- Support -->
+    <string name="ok">OK</string>
+    <string name="edit_hint">Value</string>
+    <string name="seek_value_edit_label">Set value</string>
 </resources>

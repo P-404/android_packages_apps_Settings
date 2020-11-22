@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2020-2022 Project 404
+<!-- Copyright (C) 2007 The Android Open Source Project
+     Copyright (C) 2022 Project 404
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -13,18 +14,8 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
+
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-
-    <!-- Project 404 version -->
-    <string name="p404_version_title">Project 404 version</string>
-
-    <!-- CAF tag version in About phone -->
-    <string name="caf_revision_tag">CAF revision</string>
-
-    <!-- PLatform version in About phone -->
-    <string name="platform_version">Platform version</string>
-
-    <!-- Refresh rate -->
-    <string name="refresh_rate_title">Screen refresh rate</string>
-
+    <!-- Whether to show min refresh rate in display settings -->
+    <bool name="config_show_min_refresh_rate_switch">false</bool>
 </resources>

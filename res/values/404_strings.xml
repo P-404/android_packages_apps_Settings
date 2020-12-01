@@ -201,4 +201,9 @@
         <item quantity="other">%d apps locked</item>
     </plurals>
     <string name="keywords_applock_settings">applock, applocker, app lock, app locker</string>
+
+    <!-- Authentication vibration -->
+    <string name="sucess_vib_title">Authentication vibration</string>
+    <string name="sucess_vib_summary">Haptic feedback for fingerprint and face authentication when successful</string>
+
 </resources>

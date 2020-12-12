@@ -18,15 +18,10 @@ package com.android.settings.network.telephony;
 
 import android.app.Activity;
 import android.app.settings.SettingsEnums;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.RemoteException;
-import android.os.ServiceManager;
 import android.os.UserManager;
-import android.provider.SearchIndexableResource;
 import android.provider.Settings;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
@@ -39,8 +34,6 @@ import android.view.MenuItem;
 import androidx.annotation.VisibleForTesting;
 import androidx.preference.Preference;
 
-import com.android.internal.telephony.IccCardConstants;
-import com.android.internal.telephony.TelephonyIntents;
 import com.android.settings.R;
 import com.android.settings.datausage.BillingCyclePreferenceController;
 import com.android.settings.datausage.DataUsageSummaryPreferenceController;
@@ -54,8 +47,6 @@ import com.android.settingslib.core.AbstractPreferenceController;
 import com.android.settingslib.search.SearchIndexable;
 import com.android.settingslib.utils.ThreadUtils;
 
-import org.codeaurora.internal.IExtTelephony;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -68,17 +59,12 @@ public class MobileNetworkSettings extends AbstractMobileNetworkSettings {
     @VisibleForTesting
     static final String KEY_CLICKED_PREF = "key_clicked_pref";
 
-    // UICC provisioning status
-    public static final int CARD_NOT_PROVISIONED = 0;
-    public static final int CARD_PROVISIONED = 1;
-
     //String keys for preference lookup
     private static final String BUTTON_CDMA_SYSTEM_SELECT_KEY = "cdma_system_select_key";
     private static final String BUTTON_CDMA_SUBSCRIPTION_KEY = "cdma_subscription_key";
 
     private TelephonyManager mTelephonyManager;
     private int mSubId = SubscriptionManager.INVALID_SUBSCRIPTION_ID;
-    private int mPhoneId = SubscriptionManager.INVALID_PHONE_INDEX;
 
     private CdmaSystemSelectPreferenceController mCdmaSystemSelectPreferenceController;
     private CdmaSubscriptionPreferenceController mCdmaSubscriptionPreferenceController;
@@ -89,36 +75,6 @@ public class MobileNetworkSettings extends AbstractMobileNetworkSettings {
     private ActiveSubsciptionsListener mActiveSubsciptionsListener;
     private boolean mDropFirstSubscriptionChangeNotify;
     private int mActiveSubsciptionsListenerCount;
-
-    private final BroadcastReceiver mSimStateReceiver = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
-            if (TelephonyIntents.ACTION_SIM_STATE_CHANGED.equals(action)) {
-                String state =  intent.getStringExtra(IccCardConstants.INTENT_KEY_ICC_STATE);
-                Log.d(LOG_TAG, "Received ACTION_SIM_STATE_CHANGED: " + state);
-                setScreenState();
-            }
-        }
-    };
-
-    private void setScreenState() {
-        int simState = mTelephonyManager.getSimState();
-        boolean screenState = simState != TelephonyManager.SIM_STATE_ABSENT;
-        if (screenState) {
-            int provStatus = CARD_NOT_PROVISIONED;
-            IExtTelephony extTelephony = IExtTelephony.Stub
-                    .asInterface(ServiceManager.getService("qti.radio.extphone"));
-            try {
-                provStatus = extTelephony.getCurrentUiccCardProvisioningStatus(mPhoneId);
-            } catch (RemoteException | NullPointerException ex) {
-                Log.e(LOG_TAG, "getUiccCardProvisioningStatus: " + mPhoneId + ", Exception: ", ex);
-            }
-            screenState = provStatus != CARD_NOT_PROVISIONED;
-            Log.d(LOG_TAG, "Provisioning Status: " + provStatus + ", screenState: " + screenState);
-        }
-        Log.d(LOG_TAG, "Setting screen state to: " + screenState);
-        getPreferenceScreen().setEnabled(screenState);
-    }
 
     public MobileNetworkSettings() {
         super(UserManager.DISALLOW_CONFIG_MOBILE_NETWORKS);
@@ -159,8 +115,7 @@ public class MobileNetworkSettings extends AbstractMobileNetworkSettings {
     protected List<AbstractPreferenceController> createPreferenceControllers(Context context) {
         mSubId = getArguments().getInt(Settings.EXTRA_SUB_ID,
                 MobileNetworkUtils.getSearchableSubscriptionId(context));
-        mPhoneId = SubscriptionManager.getPhoneId(mSubId);
-        Log.i(LOG_TAG, "display subId: " + mSubId + ", phoneId: " + mPhoneId);
+        Log.i(LOG_TAG, "display subId: " + mSubId);
 
         if (!SubscriptionManager.isValidSubscriptionId(mSubId)) {
             return Arrays.asList();
@@ -179,7 +134,6 @@ public class MobileNetworkSettings extends AbstractMobileNetworkSettings {
         if (dataUsageSummaryPreferenceController != null) {
             dataUsageSummaryPreferenceController.init(mSubId);
         }
-        use(DataDefaultSubscriptionController.class).init(getLifecycle());
         use(CallsDefaultSubscriptionController.class).init(getLifecycle());
         use(SmsDefaultSubscriptionController.class).init(getLifecycle());
         use(MobileNetworkSwitchController.class).init(getLifecycle(), mSubId);
@@ -195,10 +149,9 @@ public class MobileNetworkSettings extends AbstractMobileNetworkSettings {
         use(MobileDataPreferenceController.class).init(getFragmentManager(), mSubId);
         use(RoamingPreferenceController.class).init(getFragmentManager(), mSubId);
         use(ApnPreferenceController.class).init(mSubId);
-        use(UserPLMNPreferenceController.class).init(mSubId);
         use(CarrierPreferenceController.class).init(mSubId);
         use(DataUsagePreferenceController.class).init(mSubId);
-        use(PreferredNetworkModePreferenceController.class).init(getLifecycle(), mSubId);
+        use(PreferredNetworkModePreferenceController.class).init(mSubId);
         use(EnabledNetworkModePreferenceController.class).init(getLifecycle(), mSubId);
         use(DataServiceSetupPreferenceController.class).init(mSubId);
 
@@ -220,7 +173,6 @@ public class MobileNetworkSettings extends AbstractMobileNetworkSettings {
 
         final VideoCallingPreferenceController videoCallingPreferenceController =
                 use(VideoCallingPreferenceController.class).init(mSubId);
-        use(Enabled5GPreferenceController.class).init(mSubId);
         use(CallingPreferenceCategoryController.class).setChildren(
                 Arrays.asList(wifiCallingPreferenceController, videoCallingPreferenceController));
         use(Enhanced4gLtePreferenceController.class).init(mSubId)
@@ -253,7 +205,6 @@ public class MobileNetworkSettings extends AbstractMobileNetworkSettings {
 
     @Override
     public void onResume() {
-        Log.i(LOG_TAG, "onResume:+");
         super.onResume();
         if (mActiveSubsciptionsListener == null) {
             mActiveSubsciptionsListener = new ActiveSubsciptionsListener(
@@ -265,14 +216,6 @@ public class MobileNetworkSettings extends AbstractMobileNetworkSettings {
             mDropFirstSubscriptionChangeNotify = true;
         }
         mActiveSubsciptionsListener.start();
-
-        Context context = getContext();
-        if (context != null) {
-            context.registerReceiver(mSimStateReceiver,
-                    new IntentFilter(TelephonyIntents.ACTION_SIM_STATE_CHANGED));
-        } else {
-            Log.i(LOG_TAG, "context is null, not registering SimStateReceiver");
-        }
     }
 
     private void onSubscriptionDetailChanged() {
@@ -298,18 +241,6 @@ public class MobileNetworkSettings extends AbstractMobileNetworkSettings {
             mActiveSubsciptionsListener.stop();
         }
         super.onDestroy();
-    }
-
-    @Override
-    public void onPause() {
-        Log.i(LOG_TAG, "onPause:+");
-        super.onPause();
-        Context context = getContext();
-        if (context != null) {
-            context.unregisterReceiver(mSimStateReceiver);
-        } else {
-            Log.i(LOG_TAG, "context already null, not unregistering SimStateReceiver");
-        }
     }
 
     @VisibleForTesting
@@ -388,11 +319,6 @@ public class MobileNetworkSettings extends AbstractMobileNetworkSettings {
 
     public static final BaseSearchIndexProvider SEARCH_INDEX_DATA_PROVIDER =
             new BaseSearchIndexProvider(R.xml.mobile_network_settings) {
-                @Override
-                public List<SearchIndexableResource> getXmlResourcesToIndex(Context context,
-                        boolean enabled) {
-                    return super.getXmlResourcesToIndex(context, enabled);
-                }
 
                 /** suppress full page if user is not admin */
                 @Override

@@ -20,18 +20,15 @@ import static androidx.lifecycle.Lifecycle.Event.ON_START;
 import static androidx.lifecycle.Lifecycle.Event.ON_STOP;
 
 import android.content.Context;
-import android.database.ContentObserver;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.PersistableBundle;
 import android.provider.Settings;
 import android.telephony.CarrierConfigManager;
-import android.telephony.PhoneStateListener;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
@@ -57,22 +54,11 @@ public class EnabledNetworkModePreferenceController extends
 
     private static final String LOG_TAG = "EnabledNetworkMode";
     private PreferredNetworkModeContentObserver mPreferredNetworkModeObserver;
-    private ContentObserver mSubsidySettingsObserver;
     private Preference mPreference;
     private PreferenceScreen mPreferenceScreen;
     private TelephonyManager mTelephonyManager;
     private CarrierConfigManager mCarrierConfigManager;
     private PreferenceEntriesBuilder mBuilder;
-    private PhoneCallStateListener mPhoneStateListener;
-    @VisibleForTesting
-    Integer mCallState;
-
-    // Local cache for Primary Card and Subsidy Lock related vendor properties. Reading these
-    // properties are a costly affair since they involve two IPC calls, an AIDL and another HIDL.
-    // So we cache these and reuse them as and when applicable.
-    boolean mIsPrimaryCardEnabled = false;
-    boolean mIsPrimaryCardLWEnabled = false;
-    boolean mIsSubsidyLockFeatureEnabled = false;
 
     public EnabledNetworkModePreferenceController(Context context, String key) {
         super(context, key);
@@ -102,20 +88,10 @@ public class EnabledNetworkModePreferenceController extends
 
     @OnLifecycleEvent(ON_START)
     public void onStart() {
-        if (mPreferredNetworkModeObserver == null || mSubsidySettingsObserver == null) {
+        if (mPreferredNetworkModeObserver == null) {
             return;
         }
-        if (mPhoneStateListener != null) {
-            mPhoneStateListener.register(mContext, mSubId);
-        }
-
-        loadPrimaryCardAndSubsidyLockValues();
         mPreferredNetworkModeObserver.register(mContext, mSubId);
-        if (mIsSubsidyLockFeatureEnabled) {
-            mContext.getContentResolver().registerContentObserver(
-                    Settings.Secure.getUriFor(PrimaryCardAndSubsidyLockUtils.SUBSIDY_STATUS), false,
-                    mSubsidySettingsObserver);
-        }
     }
 
     @OnLifecycleEvent(ON_STOP)
@@ -123,13 +99,7 @@ public class EnabledNetworkModePreferenceController extends
         if (mPreferredNetworkModeObserver == null) {
             return;
         }
-        if (mPhoneStateListener != null) {
-            mPhoneStateListener.unregister();
-        }
         mPreferredNetworkModeObserver.unregister(mContext);
-        if (mSubsidySettingsObserver != null) {
-            mContext.getContentResolver().unregisterContentObserver(mSubsidySettingsObserver);
-        }
     }
 
     @Override
@@ -151,7 +121,6 @@ public class EnabledNetworkModePreferenceController extends
         listPreference.setEntryValues(mBuilder.getEntryValues());
         listPreference.setValue(Integer.toString(mBuilder.getSelectedEntryValue()));
         listPreference.setSummary(mBuilder.getSummary());
-        listPreference.setEnabled(isCallStateIdle());
     }
 
     @Override
@@ -176,27 +145,11 @@ public class EnabledNetworkModePreferenceController extends
         mCarrierConfigManager = mContext.getSystemService(CarrierConfigManager.class);
         mBuilder = new PreferenceEntriesBuilder(mContext, mSubId);
 
-        if (mPhoneStateListener == null) {
-            mPhoneStateListener = new PhoneCallStateListener();
-        }
         if (mPreferredNetworkModeObserver == null) {
             mPreferredNetworkModeObserver = new PreferredNetworkModeContentObserver(
                     new Handler(Looper.getMainLooper()));
             mPreferredNetworkModeObserver.setPreferredNetworkModeChangedListener(
                     () -> updatePreference());
-        }
-        if (mSubsidySettingsObserver == null) {
-            mSubsidySettingsObserver = new ContentObserver(new Handler(Looper.getMainLooper())) {
-                @Override
-                public void onChange(boolean selfChange) {
-                    if (mPreference != null) {
-                        if (PrimaryCardAndSubsidyLockUtils.DBG) {
-                            Log.d(LOG_TAG, "mSubsidySettingsObserver#onChange");
-                        }
-                        updateState(mPreference);
-                    }
-                }
-            };
         }
 
         lifecycle.addObserver(this);
@@ -387,7 +340,7 @@ public class EnabledNetworkModePreferenceController extends
                     if (entryValuesInt.length < 3) {
                         throw new IllegalArgumentException("ENABLED_NETWORKS_CHOICES index error.");
                     }
-                    add5gLteEntry(addNrToLteNetworkType(entryValuesInt[0]));
+                    add5gEntry(addNrToLteNetworkType(entryValuesInt[0]));
                     addLteEntry(entryValuesInt[0]);
                     add3gEntry(entryValuesInt[1]);
                     add2gEntry(entryValuesInt[2]);
@@ -409,69 +362,6 @@ public class EnabledNetworkModePreferenceController extends
                 default:
                     throw new IllegalArgumentException("Not supported enabled network types.");
             }
-
-            /* TODO(b/151744192) - Update Primary Card and Subsidy Lock for 75867d8f634ce62f4787dbf2aef71312308dd415
-            // Primary Card Feature
-            // If the current SIM is not the primary card
-            //     1. If PrimaryCardL_W is enabled, restrict mode selection to GSM and WCDMA options.
-            //     2. If the current mode is GSM_only, disable the network mode preference on the UI.
-            final int currentPrimarySlot = Settings.Global.getInt(mContext.getContentResolver(),
-                    PrimaryCardAndSubsidyLockUtils.CONFIG_CURRENT_PRIMARY_SUB,
-                    SubscriptionManager.INVALID_SIM_SLOT_INDEX);
-
-            boolean isCurrentPrimarySlotValid = currentPrimarySlot >= 0
-                    && currentPrimarySlot < mTelephonyManager.getActiveModemCount();
-
-            int currentPhoneId = SubscriptionManager.getPhoneId(mSubId);
-
-            Log.d(LOG_TAG, "currentPrimarySlot: " + currentPrimarySlot
-                    + ", isCurrentPrimarySlotValid: " + isCurrentPrimarySlotValid
-                    + ", currentPhoneId: " + currentPhoneId);
-
-            if (mIsPrimaryCardEnabled) {
-                if (PrimaryCardAndSubsidyLockUtils.DBG) {
-                    Log.d(LOG_TAG, "isPrimaryCardEnabled: true");
-                }
-                if (isCurrentPrimarySlotValid
-                        && currentPhoneId != currentPrimarySlot) {
-                    if (mIsPrimaryCardLWEnabled) {
-                        Log.d(LOG_TAG, "Primary card LW is enabled");
-                        preference.setEntries(R.array.enabled_networks_gsm_wcdma_choices);
-                        preference.setEntryValues(R.array.enabled_networks_gsm_wcdma_values);
-                    } else if (getPreferredNetworkMode() == TelephonyManager.NETWORK_MODE_GSM_ONLY) {
-                        Log.d(LOG_TAG, "Network mode is GSM only, disabling the preference");
-                        preference.setEnabled(false);
-                    }
-                }
-            }
-
-            // Subsidy Lock Feature
-            // If subsidy is unlocked,
-            //     1. Change the entries in the network mode choices for the primary sub.
-            //     2. Disable the network mode preference on the UI for the non-primary sub.
-            if (PrimaryCardAndSubsidyLockUtils.DBG) {
-                Log.d(LOG_TAG, "isSubsidyLockFeatureEnabled: " + mIsSubsidyLockFeatureEnabled);
-                Log.d(LOG_TAG, "isSubsidyUnlocked: "
-                        + PrimaryCardAndSubsidyLockUtils.isSubsidyUnlocked(mContext));
-            }
-
-            if (mIsSubsidyLockFeatureEnabled
-                    && PrimaryCardAndSubsidyLockUtils.isSubsidyUnlocked(mContext)) {
-                if (PrimaryCardAndSubsidyLockUtils.DBG) {
-                    Log.d(LOG_TAG, "Subsidy is unlocked");
-                }
-                if (isCurrentPrimarySlotValid) {
-                    if (currentPhoneId == currentPrimarySlot) {
-                        Log.d(LOG_TAG, "Primary sub, change to subsidy choices");
-                        preference.setEntries(R.array.enabled_networks_subsidy_locked_choices);
-                        preference.setEntryValues(R.array.enabled_networks_subsidy_locked_values);
-                    } else {
-                        Log.d(LOG_TAG, "Non-primary sub, disable the preference");
-                        preference.setEnabled(false);
-                    }
-                }
-            }
-            */
         }
 
         private int getPreferredNetworkMode() {
@@ -681,8 +571,7 @@ public class EnabledNetworkModePreferenceController extends
                 case TelephonyManagerConstants.NETWORK_MODE_NR_LTE_WCDMA:
                     setSelectedEntry(
                             TelephonyManagerConstants.NETWORK_MODE_NR_LTE_GSM_WCDMA);
-                    setSummary((mShow4gForLTE ? mContext.getString(R.string.network_5G)
-                            : mContext.getString(R.string.network_5G_lte))
+                    setSummary(mContext.getString(R.string.network_5G)
                             + mContext.getString(R.string.network_recommended));
                     break;
                 case TelephonyManagerConstants.NETWORK_MODE_NR_LTE_TDSCDMA:
@@ -692,14 +581,12 @@ public class EnabledNetworkModePreferenceController extends
                 case TelephonyManagerConstants.NETWORK_MODE_NR_LTE_TDSCDMA_CDMA_EVDO_GSM_WCDMA:
                     setSelectedEntry(TelephonyManagerConstants
                             .NETWORK_MODE_NR_LTE_TDSCDMA_CDMA_EVDO_GSM_WCDMA);
-                    setSummary((mShow4gForLTE ? mContext.getString(R.string.network_5G)
-                            : mContext.getString(R.string.network_5G_lte))
+                    setSummary(mContext.getString(R.string.network_5G)
                             + mContext.getString(R.string.network_recommended));
                     break;
                 case TelephonyManagerConstants.NETWORK_MODE_NR_LTE_CDMA_EVDO:
                     setSelectedEntry(TelephonyManagerConstants.NETWORK_MODE_NR_LTE_CDMA_EVDO);
-                    setSummary((mShow4gForLTE ? mContext.getString(R.string.network_5G)
-                            : mContext.getString(R.string.network_5G_lte))
+                    setSummary(mContext.getString(R.string.network_5G)
                             + mContext.getString(R.string.network_recommended));
                     break;
                 case TelephonyManagerConstants.NETWORK_MODE_NR_LTE_CDMA_EVDO_GSM_WCDMA:
@@ -710,8 +597,7 @@ public class EnabledNetworkModePreferenceController extends
                             || MobileNetworkUtils.isWorldMode(mContext, mSubId)) {
                         setSummary(R.string.network_global);
                     } else {
-                        setSummary((mShow4gForLTE ? mContext.getString(R.string.network_5G)
-                                : mContext.getString(R.string.network_5G_lte))
+                        setSummary(mContext.getString(R.string.network_5G)
                                 + mContext.getString(R.string.network_recommended));
                     }
                     break;
@@ -804,23 +690,6 @@ public class EnabledNetworkModePreferenceController extends
             boolean isNRValue = value >= TelephonyManagerConstants.NETWORK_MODE_NR_ONLY;
             if (showNrList() && isNRValue) {
                 mEntries.add(mContext.getString(R.string.network_5G)
-                        + mContext.getString(R.string.network_recommended));
-                mEntriesValue.add(value);
-                mIs5gEntryDisplayed = true;
-            } else {
-                mIs5gEntryDisplayed = false;
-                Log.d(LOG_TAG, "Hide 5G option. "
-                        + " supported5GRadioAccessFamily: " + mSupported5gRadioAccessFamily
-                        + " allowed5GNetworkType: " + mAllowed5gNetworkType
-                        + " isNRValue: " + isNRValue);
-            }
-        }
-
-        // This entry is used to support for 5G/LTE display in resource overlay
-        private void add5gLteEntry(int value) {
-            boolean isNRValue = value >= TelephonyManagerConstants.NETWORK_MODE_NR_ONLY;
-            if (showNrList() && isNRValue) {
-                mEntries.add(mContext.getString(R.string.network_5G_lte)
                         + mContext.getString(R.string.network_recommended));
                 mEntriesValue.add(value);
                 mIs5gEntryDisplayed = true;
@@ -942,56 +811,5 @@ public class EnabledNetworkModePreferenceController extends
             return mIs5gEntryDisplayed;
         }
 
-    }
-
-    private void loadPrimaryCardAndSubsidyLockValues() {
-        Log.d(LOG_TAG, "loadPrimaryCardAndSubsidyLockValues");
-        mIsPrimaryCardEnabled = PrimaryCardAndSubsidyLockUtils.isPrimaryCardEnabled();
-        mIsPrimaryCardLWEnabled = PrimaryCardAndSubsidyLockUtils.isPrimaryCardLWEnabled();
-        mIsSubsidyLockFeatureEnabled = PrimaryCardAndSubsidyLockUtils.isSubsidyLockFeatureEnabled();
-
-        if (PrimaryCardAndSubsidyLockUtils.DBG) {
-            Log.d(LOG_TAG, "mIsPrimaryCardEnabled: " + mIsPrimaryCardEnabled);
-            Log.d(LOG_TAG, "mIsPrimaryCardLWEnabled: " + mIsPrimaryCardLWEnabled);
-            Log.d(LOG_TAG, "mIsSubsidyLockFeatureEnabled: " + mIsSubsidyLockFeatureEnabled);
-        }
-    }
-
-    private boolean isCallStateIdle() {
-        boolean callStateIdle = true;
-        if (mCallState != null && mCallState != TelephonyManager.CALL_STATE_IDLE) {
-            callStateIdle = false;
-        }
-        Log.d(LOG_TAG, "isCallStateIdle:" + callStateIdle);
-        return callStateIdle;
-    }
-
-    private class PhoneCallStateListener extends PhoneStateListener {
-
-        PhoneCallStateListener() {
-            super(Looper.getMainLooper());
-        }
-
-        private TelephonyManager mTelephonyManager;
-
-        @Override
-        public void onCallStateChanged(int state, String incomingNumber) {
-            mCallState = state;
-            updateState(mPreference);
-        }
-
-        public void register(Context context, int subId) {
-            mTelephonyManager = context.getSystemService(TelephonyManager.class);
-            if (SubscriptionManager.isValidSubscriptionId(subId)) {
-                mTelephonyManager = mTelephonyManager.createForSubscriptionId(subId);
-            }
-            mTelephonyManager.listen(this, PhoneStateListener.LISTEN_CALL_STATE);
-
-        }
-
-        public void unregister() {
-            mCallState = null;
-            mTelephonyManager.listen(this, PhoneStateListener.LISTEN_NONE);
-        }
     }
 }

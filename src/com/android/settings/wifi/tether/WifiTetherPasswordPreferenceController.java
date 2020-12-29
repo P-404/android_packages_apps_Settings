@@ -73,8 +73,7 @@ public class WifiTetherPasswordPreferenceController extends WifiTetherBasePrefer
     public void updateDisplay() {
         final SoftApConfiguration config = mWifiManager.getSoftApConfiguration();
         if (config == null
-                || ((config.getSecurityType() == SoftApConfiguration.SECURITY_TYPE_WPA2_PSK
-                     || config.getSecurityType() == SoftApConfiguration.SECURITY_TYPE_WPA3_SAE_TRANSITION)
+                || (config.getSecurityType() == SoftApConfiguration.SECURITY_TYPE_WPA2_PSK
                 && TextUtils.isEmpty(config.getPassphrase()))) {
             mPassword = generateRandomPassword();
         } else {
@@ -117,8 +116,7 @@ public class WifiTetherPasswordPreferenceController extends WifiTetherBasePrefer
      */
     public String getPasswordValidated(int securityType) {
         // don't actually overwrite unless we get a new config in case it was accidentally toggled.
-        if (securityType == SoftApConfiguration.SECURITY_TYPE_OPEN
-                || securityType == SoftApConfiguration.SECURITY_TYPE_OWE) {
+        if (securityType == SoftApConfiguration.SECURITY_TYPE_OPEN) {
             return "";
         } else if (!isTextValid(mPassword)) {
             mPassword = generateRandomPassword();
@@ -128,8 +126,7 @@ public class WifiTetherPasswordPreferenceController extends WifiTetherBasePrefer
     }
 
     public void updateVisibility(int securityType) {
-        mPreference.setVisible(securityType != SoftApConfiguration.SECURITY_TYPE_OPEN
-                                   && securityType != SoftApConfiguration.SECURITY_TYPE_OWE);
+        mPreference.setVisible(securityType != SoftApConfiguration.SECURITY_TYPE_OPEN);
     }
 
     @Override

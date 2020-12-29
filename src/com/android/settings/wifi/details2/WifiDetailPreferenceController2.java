@@ -167,8 +167,6 @@ public class WifiDetailPreferenceController2 extends AbstractPreferenceControlle
     private NetworkCapabilities mNetworkCapabilities;
     private int mRssiSignalLevel = -1;
     @VisibleForTesting boolean mShowX; // Shows the Wi-Fi signal icon of Pie+x when it's true.
-    private int mWifiStandard;
-    private boolean mIsReady;
     private String[] mSignalStr;
     private WifiInfo mWifiInfo;
     private final WifiManager mWifiManager;
@@ -558,10 +556,7 @@ public class WifiDetailPreferenceController2 extends AbstractPreferenceControlle
     }
 
     private void refreshRssiViews() {
-        int signalLevel = mWifiEntry.getLevel();
-        int wifiStandard = mWifiEntry.getWifiStandard();
-        boolean isReady = mWifiEntry.isVhtMax8SpatialStreamsSupported() &&
-                              mWifiEntry.isHe8ssCapableAp();
+        final int signalLevel = mWifiEntry.getLevel();
 
         // Disappears signal view if not in range. e.g. for saved networks.
         if (signalLevel == WifiEntry.WIFI_LEVEL_UNREACHABLE) {
@@ -571,16 +566,13 @@ public class WifiDetailPreferenceController2 extends AbstractPreferenceControlle
         }
 
         final boolean showX = mWifiEntry.shouldShowXLevelIcon();
-        if (mRssiSignalLevel == signalLevel &&
-            mWifiStandard == wifiStandard &&
-            mIsReady == isReady && mShowX == showX) {
+
+        if (mRssiSignalLevel == signalLevel && mShowX == showX) {
             return;
         }
         mRssiSignalLevel = signalLevel;
-        mWifiStandard = wifiStandard;
-        mIsReady = isReady;
         mShowX = showX;
-        Drawable wifiIcon = mIconInjector.getIcon(mShowX, mRssiSignalLevel, mWifiStandard, mIsReady);
+        Drawable wifiIcon = mIconInjector.getIcon(mShowX, mRssiSignalLevel);
 
         if (mEntityHeaderController != null) {
             mEntityHeaderController
@@ -1018,8 +1010,8 @@ public class WifiDetailPreferenceController2 extends AbstractPreferenceControlle
             mContext = context;
         }
 
-        public Drawable getIcon(boolean showX, int level, int standard, boolean isReady) {
-            return mContext.getDrawable(Utils.getWifiIconResource(showX, level, standard, isReady)).mutate();
+        public Drawable getIcon(boolean showX, int level) {
+            return mContext.getDrawable(Utils.getWifiIconResource(showX, level)).mutate();
         }
     }
 

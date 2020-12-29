@@ -44,7 +44,6 @@ import android.net.NetworkUtils;
 import android.net.RouteInfo;
 import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
-import android.net.wifi.WifiConfiguration.KeyMgmt;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.CountDownTimer;
@@ -168,8 +167,6 @@ public class WifiDetailPreferenceController extends AbstractPreferenceController
     private NetworkInfo mNetworkInfo;
     private NetworkCapabilities mNetworkCapabilities;
     private int mRssiSignalLevel = -1;
-    private int mWifiStandard;
-    private boolean mIsReady;
     private String[] mSignalStr;
     private WifiConfiguration mWifiConfig;
     private WifiInfo mWifiInfo;
@@ -456,13 +453,6 @@ public class WifiDetailPreferenceController extends AbstractPreferenceController
         mIpv6Category = screen.findPreference(KEY_IPV6_CATEGORY);
         mIpv6AddressPref = screen.findPreference(KEY_IPV6_ADDRESSES_PREF);
 
-        if (mAccessPoint.getSecurityString(false).equals("SAE")
-             && mAccessPoint.getConfig().allowedKeyManagement.get(KeyMgmt.WPA_PSK)) {
-             mSecurityPref.setSummary(mContext.getString(R.string.wifi_security_wpa_wpa2));
-         }
-         else
-             mSecurityPref.setSummary(mAccessPoint.getSecurityString(false /* concise */));
-
         mSecurityPref.setSummary(mAccessPoint.getSecurityString(/* concise */ false));
     }
 
@@ -693,9 +683,6 @@ public class WifiDetailPreferenceController extends AbstractPreferenceController
 
     private void refreshRssiViews() {
         int signalLevel = mAccessPoint.getLevel();
-        int wifiStandard = mAccessPoint.getWifiStandard();
-        boolean isReady = (mAccessPoint.isVhtMax8SpatialStreamsSupported()
-                          && mAccessPoint.isHe8ssCapableAp());
 
         // Disappears signal view if not in range. e.g. for saved networks.
         if (mIsOutOfRange) {
@@ -704,15 +691,11 @@ public class WifiDetailPreferenceController extends AbstractPreferenceController
             return;
         }
 
-        if (mRssiSignalLevel == signalLevel
-            && mWifiStandard == wifiStandard
-            && mIsReady == isReady) {
+        if (mRssiSignalLevel == signalLevel) {
             return;
         }
         mRssiSignalLevel = signalLevel;
-        mWifiStandard = wifiStandard;
-        mIsReady = isReady;
-        Drawable wifiIcon = mIconInjector.getIcon(mRssiSignalLevel, mWifiStandard, mIsReady);
+        Drawable wifiIcon = mIconInjector.getIcon(mRssiSignalLevel);
 
         if (mEntityHeaderController != null) {
             mEntityHeaderController
@@ -768,9 +751,6 @@ public class WifiDetailPreferenceController extends AbstractPreferenceController
         } else if (frequency >= AccessPoint.LOWER_FREQ_5GHZ
                 && frequency < AccessPoint.HIGHER_FREQ_5GHZ) {
             band = mContext.getResources().getString(R.string.wifi_band_5ghz);
-        } else if (frequency >= AccessPoint.LOWER_FREQ_60GHZ
-                && frequency < AccessPoint.HIGHER_FREQ_60GHZ) {
-            band = mContext.getResources().getString(R.string.wifi_band_60ghz);
         } else {
             Log.e(TAG, "Unexpected frequency " + frequency);
             // Connecting state is unstable, make it disappeared if unexpected
@@ -1098,10 +1078,6 @@ public class WifiDetailPreferenceController extends AbstractPreferenceController
 
         public Drawable getIcon(int level) {
             return mContext.getDrawable(Utils.getWifiIconResource(level)).mutate();
-        }
-
-        public Drawable getIcon(int level, int standard, boolean isReady) {
-            return mContext.getDrawable(Utils.getWifiIconResource(level, standard, isReady)).mutate();
         }
     }
 

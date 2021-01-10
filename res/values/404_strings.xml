@@ -82,4 +82,10 @@
     <string name="reset_settings_title">Feature preferences</string>
     <string name="reset_settings_summary">Reset Project 404 feature preferences</string>
     <string name="keywords_settings_reset">reset</string>
+
+    <!-- Doze on double tap -->
+    <string name="double_tap_title">Double tap</string>
+    <string name="doze_double_tap_title">Double tap to check phone</string>
+    <string name="doze_double_tap_summary">Pulse notifications by a double tap</string>
+
 </resources>

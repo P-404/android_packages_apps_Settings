@@ -279,4 +279,8 @@
     <string name="network_traffic_refresh_interval_title">Refresh interval</string>
     <string name="network_traffic_refresh_interval_summary">Duration after which speed is remeasured</string>
     <string name="unit_seconds">seconds</string>
+
+    <!-- Hotspot Client -->
+    <string name="wifi_tether_client_list_title">Client List</string>
+    <string name="wifi_tether_client_list_summary">Manage clients connected to hotspot</string>
 </resources>

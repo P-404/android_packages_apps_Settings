@@ -22,6 +22,19 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
+import android.os.Build;
+import android.os.SystemClock;
+import android.os.SystemProperties;
+import android.os.UserHandle;
+import android.os.UserManager;
+
+import androidx.annotation.VisibleForTesting;
+import androidx.preference.Preference;
+
+import com.android.settings.R;
+import com.android.settings.Utils;
+import com.android.settingslib.RestrictedLockUtils;
+import com.android.settingslib.RestrictedLockUtilsInternal;
 
 import androidx.preference.Preference;
 
@@ -30,9 +43,10 @@ import com.android.settingslib.DeviceInfoUtils;
 
 public class SecurityPatchLevelPreferenceController extends BasePreferenceController {
 
+    private static final String CAF_TAG = "ro.caf.tag";
     private static final String TAG = "SecurityPatchCtrl";
     private static final Uri INTENT_URI_DATA = Uri.parse(
-            "https://source.android.com/security/bulletin/");
+            "https://www.codeaurora.org/");
 
     private final PackageManager mPackageManager;
     private final String mCurrentPatch;
@@ -51,7 +65,8 @@ public class SecurityPatchLevelPreferenceController extends BasePreferenceContro
 
     @Override
     public CharSequence getSummary() {
-        return mCurrentPatch;
+        String CAFTag = SystemProperties.get(CAF_TAG);
+        return CAFTag;
     }
 
     @Override

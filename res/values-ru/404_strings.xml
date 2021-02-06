@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright 2020 Project 404
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- 404 version -->
+    <string name="P404_version">Версия 404</string>
+    <string name="P404_version_code">Код версии 404</string>
+    <string name="P404_version_keywords">Версия 404</string>
+    <string name="P404_build_number">Номер сборки 404</string>
+
+    <!-- Torch Power button gestures -->
+    <string name="power_button_torch_title">Фонарик</string>
+    <string name="power_button_torch_summary">Когда экран отключён, долгое нажатие включит фонарик</string>
+
+    <!-- Volume button music control -->
+    <string name="volume_button_music_control_title">Управление воспроизвдением</string>
+    <string name="volume_button_music_control_summary">Когда экран отключён, долгое нажатие кнопок громкости переключит музыку</string>
+
+    <!-- Horizon Light -->
+    <string name="pulse_ambient_light_title">Edge-уведомления</string>
+    <string name="pulse_ambient_light_summary">Подсвечивать края экрана, когда приходит уведомление</string>
+    <string name="ambient_notification_light_accent_title">Цвет акцента системы</string>
+    <string name="ambient_notification_light_color_automatic_title">Цвет уведомлений</string>
+    <string name="pulse_ambient_light_color">При подсведке, использовать</string>
+
+    <!-- Global Actions -->
+    <string name="global_actions_advanced_reboot_title">Дополнительные настройки переагрузки</string>
+    <string name="global_actions_advanced_reboot_summary">Показать настройки перезагрузки в режим рекавери и загрузчик</string>
+
+    <!-- Screenshot shutter -->
+    <string name="screenshot_shutter_sound_title">Звук скриншота</string>
+
+    <!-- Ambient Music -->
+    <string name="pulse_on_new_tracks_title">Ambient музыкальный тикер</string>
+    <string name="pulse_on_new_tracks_summary">Включать Ambient Display, когда проигрывается следующий трек</string>
+
+    <!-- Navbar length -->
+    <string name="navbar_length">Ширина полоски жестов</string>
+    <string name="hidden_label">Скрыто</string>
+    <string name="long_label">Длинная</string>
+
+    <!-- Back gesture height -->
+    <string name="back_height_low_label">Весь экран</string>
+    <string name="back_height_high_label">Снизу</string>
+    <string name="back_options_dialog_title">Настройки</string>
+    <string name="back_height_message">Площадь экрана, используемая для жеста назад.</string>
+
+    <!-- Support -->
+    <string name="edit_hint">Значение</string>
+    <string name="seek_value_edit_label">Выбрать знчение</string>
+
+    <!-- Statusbar net monitor -->
+    <string name="net_monitor_category_title">Индикаторы трафика</string>
+    <string name="network_traffic_state_title">Показывать активность сети в статус баре</string>
+    <string name="network_traffic_autohide_threshold_title">Порог скрытия индикатора (Кб/с)</string>
+    <string name="network_traffic_dynamic">Динамический индикатор</string>
+    <string name="network_traffic_dynamic_summary">Автоматичеси переключать стрелки загрузки и выгрузки</string>
+    <string name="network_traffic_type">Выберите тип активности</string>
+
+    <!-- Format string for fingerprint location message -->
+    <string name="security_settings_fingerprint_enroll_find_sensor_message_cm" product="tablet">Найдите сканер отпечатков пальцев на <xliff:g id="sensor_location">%1$s</xliff:g> вашего планшета.</string>
+    <string name="security_settings_fingerprint_enroll_find_sensor_message_cm" product="device">Найдите сканер отпечатков пальцев на <xliff:g id="sensor_location">%1$s</xliff:g> вашего устройства.</string>
+    <string name="security_settings_fingerprint_enroll_find_sensor_message_cm" product="default">Найдите сканер отпечатков пальцев на <xliff:g id="sensor_location">%1$s</xliff:g> вашего телефона.</string>
+
+    <!-- Fingerprint sensor locations -->
+    <string name="security_settings_fingerprint_sensor_location_back">задней стороне</string>
+    <string name="security_settings_fingerprint_sensor_location_front">фронтальной стороне</string>
+    <string name="security_settings_fingerprint_sensor_location_left">левой стороне</string>
+    <string name="security_settings_fingerprint_sensor_location_right">правой стороне</string>
+
+    <!-- Battery Styles -->
+    <string name="battery_percent_title">Индикатор заряда батареи в статус баре</string>
+    <string name="battery_percent_summary">Настройки стиля значков и текста для индикатора заряда батареи в статус баре</string>
+    <string name="status_bar_battery_style_title">Стиль батреи</string>
+    <string name="status_bar_battery_style_icon_portrait">По умолчанию</string>
+    <string name="status_bar_battery_style_circle">Круг</string>
+    <string name="status_bar_battery_style_dotted_circle">Точечный круг</string>
+    <string name="status_bar_battery_style_filled_circle">Заполненный круг</string>
+    <string name="status_bar_battery_style_text">Текст</string>
+    <string name="status_bar_battery_style_hidden">Спрятан</string>
+    <string name="status_bar_battery_percentage_title">Проценты</string>
+    <string name="status_bar_battery_percentage_default">Спрятаны</string>
+    <string name="status_bar_battery_percentage_text_inside">Внутри значки</string>
+    <string name="status_bar_battery_percentage_text_next">Справа от значка</string>
+    <string name="qs_battery_percentage_title">Проценты заряда</string>
+    <string name="qs_battery_percentage_summary">Показывать проценты заряда вместо примерной работы батареи в шторке быстрых настроек</string>
+
+    <!-- Adaptive Playback -->
+    <string name="adaptive_playback_screen_title">Адаптивное воспроизведение</string>
+    <string name="adaptive_playback_disabled_summary">Выкл</string>
+    <string name="adaptive_playback_timeout_title">Использовать тайм-аут</string>
+    <string name="adaptive_playback_timeout_none">Без тайм-аута</string>
+    <string name="adaptive_playback_timeout_none_summary">Вкл (без тайм-аута)</string>
+    <string name="adaptive_playback_timeout_30_secs">30 секунд</string>
+    <string name="adaptive_playback_timeout_30_secs_summary">Вкд (30 секунд)</string>
+    <string name="adaptive_playback_timeout_1_min">1 минута</string>
+    <string name="adaptive_playback_timeout_1_min_summary">Вкл (1 минута)</string>
+    <string name="adaptive_playback_timeout_2_min">2 минуты</string>
+    <string name="adaptive_playback_timeout_2_min_summary">Вкл (2 минуты)</string>
+    <string name="adaptive_playback_timeout_5_min">5 минут</string>
+    <string name="adaptive_playback_timeout_5_min_summary">Вкл (5 минут)</string>
+    <string name="adaptive_playback_timeout_10_min">10 минут</string>
+    <string name="adaptive_playback_timeout_10_min_summary">Вкл (10 минут)</string>
+
+    <!-- QS advanced settings -->
+    <string name="qs_column_rows_settings_title">Настройки шторки быстрых настроек</string>
+    <string name="status_bar_quick_qs_pulldown">Быстрый доступ</string>
+    <string name="quick_pulldown_none">Отключён</string>
+    <string name="quick_pulldown_right">Справа</string>
+    <string name="quick_pulldown_left">Слева</string>
+
+    <!-- QS rows and columns -->
+    <string name="qs_columns_rows_category_title">Столбцы и рады</string>
+    <string name="qs_rows_columns_title">Настройки столбцов и рядов в шторке быстрых настроек</string>
+    <string name="qs_rows_portrait_title">Ряды (Портретный режим)</string>
+    <string name="qs_rows_landscape_title">ряды (Ландшафт)</string>
+    <string name="qs_columns_portrait_title">Колонки (Портретный режим)</string>
+    <string name="qs_columns_landscape_title">Колонки (Ландшафт)</string>
+    <string name="qs_tile_title_visibility_title">Название плиток</string>
+
+    <!-- Three-fingers-swipe to screenshot -->
+    <string name="three_finger_gesture">Свайп для скриншота</string>
+    <string name="three_finger_gesture_summary">Смазните 3 пальцами по экрану для создания скриншота</string>
+
+    <!-- Per-app data restrictions -->
+    <string name="data_usage_app_restrict_all">Разрешить доступ к сети</string>
+    <string name="data_usage_app_restrict_all_summary">Разрешить использование сети</string>
+    <string name="data_usage_app_restrict_mobile">Мобильные данные</string>
+    <string name="data_usage_app_restrict_mobile_summary">Включить статистику использования мобильных данных</string>
+    <string name="data_usage_app_restrict_vpn">Данные VPN</string>
+    <string name="data_usage_app_restrict_vpn_summary">Включить статистику использования VPN</string>
+    <string name="data_usage_app_restrict_wifi">Данные Wi\u2011Fi</string>
+    <string name="data_usage_app_restrict_wifi_summary">Включить статистику использования Wi\u2011Fi</string>
+
+    <!-- Night Display API strings -->
+    <string name="unknown_night_light_time">Не опознано - нажмите чтобы обновить</string>
+    <string name="night_display_location_text">\n\nГрафик от заката до восхода солнца требует включения служб определения местоположения, чтобы определять правильное время для вашего местоположения..</string>
+
+    <!--  Volume Panel Plugin   -->
+    <string name="volume_panel">Стиль панели регулеровки звука</string>
+    <string name="volume_panel_compact">Компактный</string>
+    <string name="volume_panel_tiled">Плиточный</string>
+
+    <!-- AOD on charge -->
+    <string name="doze_on_charge_title">Включенный экран при зарядке</string>
+    <string name="doze_on_charge_summary">Показывать Ambient display когда устройство заряжается</string>
+
+    <!-- Cycle through ringer modes gesture -->
+    <string name="prevent_ringing_option_cycle">Перключение режимов звонка</string>
+    <string name="prevent_ringing_option_cycle_summary">Вкл (переключать режимы звонка)</string>
+
+    <!-- Volume link notification -->
+    <string name="volume_link_notification_title">Соеденить настройки звука уведомлений и звонка воедино</string>
+
+    <!-- Aggressive battery -->
+    <string name="aggressive_idle_title">Продвинутый режим сна</string>
+    <string name="aggressive_idle_summary">Уменьшить количество пробуждений устройства и сократить время, необходимое для перехода в режим сна</string>
+    <string name="aggressive_standby_title">Агрессивный режим сна</string>
+    <string name="aggressive_standby_summary">Запретить запуск приложений в фоновом режиме</string>
+
+    <!-- Ambient Music Indicator -->
+    <string name="ambient_music_location">Показать тикер Ambient-музыки</string>
+    <string name="ambient_music_disabled">Отключено</string>
+    <string name="ambient_music_bottom">Сверху (по умолчанию)</string>
+    <string name="ambient_music_center">В центре (под часами)</string>
+
+    <!-- Customization Categories/Fragment Titles -->
+    <string name="clocksettings_title">Настройки часов</string>
+    <string name="clocksettings_summary">Настройки часов в статус баре</string>
+    <string name="status_bar_clock_date_title">Часы и дата</string>
+    <string name="status_bar_clock_date_summary">Настройте стиль часов и даты по вашему вкусу!</string>
+    <string name="status_bar_clock_title">Настройки часов</string>
+    <string name="status_bar_clock_show">Показывать часы и дату</string>
+    <string name="status_bar_clock_style_title">Положение часов</string>
+    <string name="status_bar_clock_style_right">Справа</string>
+    <string name="status_bar_clock_style_center">По центра</string>
+    <string name="status_bar_clock_style_left">Слева</string>
+    <string name="status_bar_date_title">Настройки даты</string>
+    <string name="status_bar_am_pm_title">Стиль AM/PM</string>
+    <string name="status_bar_am_pm_info">24-часовой формат включён</string>
+    <string name="status_bar_am_pm_normal">Нормальный</string>
+    <string name="status_bar_am_pm_small">Маленький</string>
+    <string name="status_bar_am_pm_hidden">Скрыто (по умолчанию)</string>
+    <string name="clock_seconds_display">Показывать секунды</string>
+    <string name="clock_date_display">Дата</string>
+    <string name="clock_date_display_summary">Отобразить настраиваемую дату перед часами</string>
+    <string name="clock_date_display_none">Не показывать</string>
+    <string name="clock_date_display_small">Маленький размер шрифта</string>
+    <string name="clock_date_display_normal">Нормальный размер шрифта</string>
+    <string name="clock_date_style">Стиль даты</string>
+    <string name="clock_date_style_normal">Нормальный</string>
+    <string name="clock_date_style_lowercase">Строчные буквы</string>
+    <string name="clock_date_style_uppercase">Верхний регистр</string>
+    <string name="clock_date_format_custom">Настраеваемый java-формат</string>
+    <string name="clock_date_format">Формат даты</string>
+    <string name="clock_date_string_edittext_title">Должен быть примерно таким DateFormat eg. MM/dd/yy</string>
+    <string name="clock_date_string_edittext_summary">Ввести строку</string>
+    <string name="clock_date_right">Справа от часов</string>
+    <string name="clock_date_left">Слева от часов</string>
+    <string name="clock_date_position">Позиция даты</string>
+
+</resources>

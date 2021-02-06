@@ -35,10 +35,10 @@
     <string name="pulse_ambient_light_summary">Подсвечивать края экрана, когда приходит уведомление</string>
     <string name="ambient_notification_light_accent_title">Цвет акцента системы</string>
     <string name="ambient_notification_light_color_automatic_title">Цвет уведомлений</string>
-    <string name="pulse_ambient_light_color">При подсведке, использовать</string>
+    <string name="pulse_ambient_light_color">При подсветке, использовать</string>
 
     <!-- Global Actions -->
-    <string name="global_actions_advanced_reboot_title">Дополнительные настройки переагрузки</string>
+    <string name="global_actions_advanced_reboot_title">Дополнительные настройки перезагрузки</string>
     <string name="global_actions_advanced_reboot_summary">Показать настройки перезагрузки в режим рекавери и загрузчик</string>
 
     <!-- Screenshot shutter -->
@@ -61,7 +61,7 @@
 
     <!-- Support -->
     <string name="edit_hint">Значение</string>
-    <string name="seek_value_edit_label">Выбрать знчение</string>
+    <string name="seek_value_edit_label">Выбрать значение</string>
 
     <!-- Statusbar net monitor -->
     <string name="net_monitor_category_title">Индикаторы трафика</string>
@@ -94,7 +94,7 @@
     <string name="status_bar_battery_style_hidden">Спрятан</string>
     <string name="status_bar_battery_percentage_title">Проценты</string>
     <string name="status_bar_battery_percentage_default">Спрятаны</string>
-    <string name="status_bar_battery_percentage_text_inside">Внутри значки</string>
+    <string name="status_bar_battery_percentage_text_inside">Внутри значка</string>
     <string name="status_bar_battery_percentage_text_next">Справа от значка</string>
     <string name="qs_battery_percentage_title">Проценты заряда</string>
     <string name="qs_battery_percentage_summary">Показывать проценты заряда вместо примерной работы батареи в шторке быстрых настроек</string>
@@ -106,7 +106,7 @@
     <string name="adaptive_playback_timeout_none">Без тайм-аута</string>
     <string name="adaptive_playback_timeout_none_summary">Вкл (без тайм-аута)</string>
     <string name="adaptive_playback_timeout_30_secs">30 секунд</string>
-    <string name="adaptive_playback_timeout_30_secs_summary">Вкд (30 секунд)</string>
+    <string name="adaptive_playback_timeout_30_secs_summary">Вкл (30 секунд)</string>
     <string name="adaptive_playback_timeout_1_min">1 минута</string>
     <string name="adaptive_playback_timeout_1_min_summary">Вкл (1 минута)</string>
     <string name="adaptive_playback_timeout_2_min">2 минуты</string>
@@ -124,7 +124,7 @@
     <string name="quick_pulldown_left">Слева</string>
 
     <!-- QS rows and columns -->
-    <string name="qs_columns_rows_category_title">Столбцы и рады</string>
+    <string name="qs_columns_rows_category_title">Столбцы и ряды</string>
     <string name="qs_rows_columns_title">Настройки столбцов и рядов в шторке быстрых настроек</string>
     <string name="qs_rows_portrait_title">Ряды (Портретный режим)</string>
     <string name="qs_rows_landscape_title">ряды (Ландшафт)</string>
@@ -134,7 +134,7 @@
 
     <!-- Three-fingers-swipe to screenshot -->
     <string name="three_finger_gesture">Свайп для скриншота</string>
-    <string name="three_finger_gesture_summary">Смазните 3 пальцами по экрану для создания скриншота</string>
+    <string name="three_finger_gesture_summary">Проскользите 3 пальцами по экрану для создания скриншота</string>
 
     <!-- Per-app data restrictions -->
     <string name="data_usage_app_restrict_all">Разрешить доступ к сети</string>
@@ -160,7 +160,7 @@
     <string name="doze_on_charge_summary">Показывать Ambient display когда устройство заряжается</string>
 
     <!-- Cycle through ringer modes gesture -->
-    <string name="prevent_ringing_option_cycle">Перключение режимов звонка</string>
+    <string name="prevent_ringing_option_cycle">Переключение режимов звонка</string>
     <string name="prevent_ringing_option_cycle_summary">Вкл (переключать режимы звонка)</string>
 
     <!-- Volume link notification -->
@@ -187,7 +187,7 @@
     <string name="status_bar_clock_show">Показывать часы и дату</string>
     <string name="status_bar_clock_style_title">Положение часов</string>
     <string name="status_bar_clock_style_right">Справа</string>
-    <string name="status_bar_clock_style_center">По центра</string>
+    <string name="status_bar_clock_style_center">По центру</string>
     <string name="status_bar_clock_style_left">Слева</string>
     <string name="status_bar_date_title">Настройки даты</string>
     <string name="status_bar_am_pm_title">Стиль AM/PM</string>

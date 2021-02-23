@@ -310,7 +310,6 @@
     <style name="TextAppearance.SearchBar"
            parent="@*android:style/TextAppearance.DeviceDefault.Widget.Toolbar.Subtitle">
         <item name="android:textSize">@dimen/search_bar_text_size</item>
-        <item name="android:layout_gravity">center</item>
     </style>
 
     <style name="TextAppearance.HomepageCardTitle"
@@ -481,8 +480,7 @@
     </style>
 
     <style name="SearchBarStyle">
-        <item name="android:layout_margin">@dimen/search_bar_margin</item>
-        <item name="cardCornerRadius">@*android:dimen/config_dialogCornerRadius</item>
+        <item name="cardCornerRadius">38dp</item>
         <item name="enforceMaterialTheme">true</item>
         <item name="cardElevation">3dp</item>
         <item name="shapeAppearance">@null</item>

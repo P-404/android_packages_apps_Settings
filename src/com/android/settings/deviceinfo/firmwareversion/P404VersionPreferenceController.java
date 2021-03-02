@@ -45,6 +45,6 @@ public class P404VersionPreferenceController extends BasePreferenceController {
             String P404VersionCode = SystemProperties.get(P404_VERSION_CODE_PROP,
 			    mContext.getString(R.string.device_info_default));
 
-	    return P404VersionCode + P404Version;
+	    return P404VersionCode + " " + P404Version;
     }
 }

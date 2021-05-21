@@ -19,39 +19,6 @@
     xmlns:settings="http://schemas.android.com/apk/res-auto"
     android:title="@string/connected_device_connections_title">
 
-    <Preference
-        android:fragment="com.android.settings.connecteddevice.BluetoothDashboardFragment"
-        android:key="bluetooth_switchbar_screen"
-        android:title="@string/bluetooth_settings_title"
-        android:icon="@*android:drawable/ic_settings_bluetooth"
-        android:order="-9"/>
-
-    <Preference
-        android:fragment="com.android.settings.connecteddevice.NfcAndPaymentFragment"
-        android:key="nfc_and_payment_settings"
-        android:title="@string/nfc_quick_toggle_title"
-        android:icon="@drawable/ic_nfc"
-        android:order="-7"
-        settings:searchable="false"
-        settings:controller="com.android.settings.connecteddevice.NfcAndPaymentFragmentController"/>
-
-    <Preference
-        android:fragment="com.android.settings.wfd.WifiDisplaySettings"
-        android:key="wifi_display_settings"
-        android:title="@string/wifi_display_settings_title"
-        android:icon="@drawable/ic_cast_24dp"
-        android:order="-6"
-        settings:controller="com.android.settings.wfd.WifiDisplayPreferenceController"
-        settings:keywords="@string/keywords_wifi_display_settings"/>
-
-    <com.android.settingslib.RestrictedPreference
-        android:fragment="com.android.settings.nfc.AndroidBeam"
-        android:key="android_beam_settings"
-        android:title="@string/android_beam_settings_title"
-        settings:controller="com.android.settings.nfc.AndroidBeamPreferenceController"
-        android:icon="@drawable/ic_android"
-        android:order="-5"/>
-
     <com.android.settingslib.RestrictedPreference
         android:key="connected_device_printing"
         android:title="@string/print_settings"

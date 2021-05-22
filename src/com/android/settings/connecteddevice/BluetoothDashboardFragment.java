@@ -18,6 +18,8 @@ package com.android.settings.connecteddevice;
 import android.app.settings.SettingsEnums;
 import android.content.Context;
 import android.os.Bundle;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.android.settings.R;
 import com.android.settings.SettingsActivity;
@@ -30,6 +32,8 @@ import com.android.settings.widget.SwitchBarController;
 import com.android.settingslib.core.lifecycle.Lifecycle;
 import com.android.settingslib.search.SearchIndexable;
 import com.android.settingslib.widget.FooterPreference;
+import com.android.settings.bluetooth.BluetoothFilesPreferenceController;
+import com.android.settingslib.core.AbstractPreferenceController;
 
 /**
  * Dedicated screen for allowing the user to toggle bluetooth which displays relevant information to
@@ -75,6 +79,20 @@ public class BluetoothDashboardFragment extends DashboardFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         use(BluetoothDeviceRenamePreferenceController.class).setFragment(this);
+    }
+
+    @Override
+    protected List<AbstractPreferenceController> createPreferenceControllers(Context context) {
+        return buildControllers(context, getSettingsLifecycle());
+    }
+
+    private static List<AbstractPreferenceController> buildControllers(Context context,
+            Lifecycle lifecycle) {
+        final List<AbstractPreferenceController> controllers = new ArrayList<>();
+
+        controllers.add(new BluetoothFilesPreferenceController(context));
+
+        return controllers;
     }
 
     @Override

@@ -19,19 +19,6 @@
     xmlns:settings="http://schemas.android.com/apk/res-auto"
     android:title="@string/connected_device_connections_title">
 
-    <com.android.settingslib.RestrictedPreference
-        android:key="connected_device_printing"
-        android:title="@string/print_settings"
-        android:summary="@string/summary_placeholder"
-        android:icon="@*android:drawable/ic_settings_print"
-        android:fragment="com.android.settings.print.PrintSettingsFragment"
-        android:order="-3"/>
-
-    <Preference
-        android:key="bt_received_files"
-        android:icon="@drawable/ic_folder_vd_theme_24"
-        android:title="@string/bluetooth_show_files_received_via_bluetooth"/>
-
     <PreferenceCategory
         android:key="dashboard_tile_placeholder"
         android:order="-8"/>

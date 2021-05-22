@@ -53,6 +53,14 @@
         android:icon="@drawable/ic_android"
         android:order="-5"/>
 
+    <com.android.settingslib.RestrictedPreference
+        android:key="connected_device_printing"
+        android:title="@string/print_settings"
+        android:summary="@string/summary_placeholder"
+        android:icon="@*android:drawable/ic_settings_print"
+        android:fragment="com.android.settings.print.PrintSettingsFragment"
+        android:order="-3"/>
+
     <com.android.settings.slices.SlicePreference
         android:key="bt_nearby_slice"
         android:title="@string/summary_placeholder"

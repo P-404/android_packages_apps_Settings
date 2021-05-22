@@ -73,7 +73,6 @@ public class AdvancedConnectedDeviceDashboardFragment extends DashboardFragment 
             Lifecycle lifecycle) {
         final List<AbstractPreferenceController> controllers = new ArrayList<>();
 
-        controllers.add(new BluetoothFilesPreferenceController(context));
 
         final PrintSettingPreferenceController printerController =
                 new PrintSettingPreferenceController(context);
@@ -84,6 +83,7 @@ public class AdvancedConnectedDeviceDashboardFragment extends DashboardFragment 
         controllers.add(printerController);
 
         return controllers;
+
     }
 
     /**

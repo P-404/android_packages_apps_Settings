@@ -117,17 +117,6 @@
     <string name="unknown_night_light_time">Unknown - press to update</string>
     <string name="night_display_location_text">\n\nThe schedule from sunset to sunrise requires enabled location services to get the correct times for your location.</string>
 
-    <!--  Volume Panel Plugin   -->
-    <string name="volume_panel">Volume Panel Style</string>
-    <string name="volume_panel_aosp">AOSP</string>
-    <string name="volume_panel_compact">Compact</string>
-    <string name="volume_panel_tiled">Tiled</string>
-
-    <!--  Volume Panel Plugin Values   -->
-    <string name="volume_panel_aosp_val">co.potatoproject.plugin.volume.aosp</string>
-    <string name="volume_panel_compact_val">co.potatoproject.plugin.volume.compact</string>
-    <string name="volume_panel_tiled_val">co.potatoproject.plugin.volume.tiled</string>
-
     <!-- AOD on charge -->
     <string name="doze_on_charge_title">Always On when charging</string>
     <string name="doze_on_charge_summary">Show Always On Ambient display when charging</string>

@@ -39,19 +39,6 @@
       <item>2</item>
     </string-array>
 
-    <!--  Volume Panel  -->
-    <string-array name="volume_panel_entries">
-        <item>@string/volume_panel_aosp</item>
-        <item>@string/volume_panel_compact</item>
-        <item>@string/volume_panel_tiled</item>
-    </string-array>
-
-    <string-array name="volume_panel_values" translatable="false">
-        <item>@string/volume_panel_aosp_val</item>
-        <item>@string/volume_panel_compact_val</item>
-        <item>@string/volume_panel_tiled_val</item>
-    </string-array>
-
     <!-- Ambient music ticker location -->
     <string-array name="ambient_music_location_entries">
         <item>@string/ambient_music_disabled</item>

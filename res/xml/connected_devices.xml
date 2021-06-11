@@ -23,6 +23,7 @@
     <Preference
         android:fragment="com.android.settings.connecteddevice.BluetoothDashboardFragment"
         android:key="bluetooth_switchbar_screen"
+        android:summary="@string/min_bluetooth_summary"
         android:title="@string/bluetooth_settings_title"
         android:icon="@*android:drawable/ic_settings_bluetooth"
         android:order="-9"/>
@@ -31,6 +32,7 @@
         android:fragment="com.android.settings.connecteddevice.NfcAndPaymentFragment"
         android:key="nfc_and_payment_settings"
         android:title="@string/nfc_quick_toggle_title"
+        android:summary="@string/min_nfc_summary"
         android:icon="@drawable/ic_nfc"
         android:order="-7"
         settings:searchable="false"
@@ -40,6 +42,7 @@
         android:fragment="com.android.settings.wfd.WifiDisplaySettings"
         android:key="wifi_display_settings"
         android:title="@string/wifi_display_settings_title"
+        android:summary="@string/min_cast_summary"
         android:icon="@drawable/ic_cast_24dp"
         android:order="-6"
         settings:controller="com.android.settings.wfd.WifiDisplayPreferenceController"
@@ -56,7 +59,7 @@
     <com.android.settingslib.RestrictedPreference
         android:key="connected_device_printing"
         android:title="@string/print_settings"
-        android:summary="@string/summary_placeholder"
+        android:summary="@string/min_printer_summary"
         android:icon="@*android:drawable/ic_settings_print"
         android:fragment="com.android.settings.print.PrintSettingsFragment"
         android:order="-3"/>
@@ -184,7 +187,7 @@
 
     <com.android.settingslib.widget.FooterPreference
         android:key="discoverable_footer"
-        android:title="@string/bluetooth_off_footer"
+        android:title="@string/other_off_footer"
         android:selectable="false"
         settings:controller="com.android.settings.connecteddevice.DiscoverableFooterPreferenceController">
     </com.android.settingslib.widget.FooterPreference>

@@ -101,7 +101,7 @@ public class DiscoverableFooterPreferenceController extends BasePreferenceContro
         if (bluetoothState == BluetoothAdapter.STATE_ON) {
             mPreference.setTitle(getPreferenceTitle());
         } else {
-            mPreference.setTitle(R.string.bluetooth_off_footer);
+            mPreference.setTitle(R.string.other_off_footer);
         }
     }
 

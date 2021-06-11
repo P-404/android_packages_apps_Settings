@@ -322,6 +322,8 @@
     <!-- Footer description for discoverable mode in bluetooth off state [CHAR LIMIT=none] -->
     <string name="bluetooth_off_footer">Turn on Bluetooth to connect to other devices.</string>
 
+    <string name="other_off_footer">Turn on Services to connect to other devices.</string>
+
     <!-- Title for paired device group [CHAR LIMIT=none] -->
     <string name="bluetooth_paired_device_title">Your devices</string>
     <!-- Title for pairing bluetooth device page [CHAR LIMIT=none] -->
@@ -7588,21 +7590,21 @@
     <!-- Title for setting tile leading to Connected devices settings [CHAR LIMIT=40]-->
     <string name="connected_devices_dashboard_title">Connected devices</string>
     <!-- Summary for Connected devices settings, explaning a few important settings under it [CHAR LIMIT=NONE]-->
-    <string name="connected_devices_dashboard_summary">Bluetooth, driving mode, NFC</string>
+    <string name="connected_devices_dashboard_summary">driving mode, NFC,Others Services</string>
     <!-- Summary for Connected devices settings, explaning a few important settings under it [CHAR LIMIT=NONE]-->
-    <string name="connected_devices_dashboard_no_nfc_summary">Bluetooth, driving mode</string>
+    <string name="connected_devices_dashboard_no_nfc_summary">driving mode,Others Services</string>
     <!-- Summary for Connected devices settings, explaning a few important settings under it [CHAR LIMIT=NONE]-->
-    <string name="connected_devices_dashboard_no_driving_mode_summary">Bluetooth, NFC</string>
+    <string name="connected_devices_dashboard_no_driving_mode_summary">NFC,Others Services </string>
     <!-- Summary for Connected devices settings, explaning a few important settings under it [CHAR LIMIT=NONE]-->
-    <string name="connected_devices_dashboard_no_driving_mode_no_nfc_summary">Bluetooth</string>
+    <string name="connected_devices_dashboard_no_driving_mode_no_nfc_summary">Other Connecting Services</string>
     <!--Summary for Connected devices settings, explaning a few important settings under it [CHAR LIMIT=NONE]-->
-    <string name="connected_devices_dashboard_android_auto_summary">Bluetooth, Android Auto, driving mode, NFC</string><!--
+    <string name="connected_devices_dashboard_android_auto_summary"> Android Auto, driving mode, NFC,Others</string><!--
     Summary for Connected devices settings, explaning a few important settings under it [CHAR LIMIT=NONE]-->
-    <string name="connected_devices_dashboard_android_auto_no_nfc_summary">Bluetooth, Android Auto, driving mode</string>
+    <string name="connected_devices_dashboard_android_auto_no_nfc_summary"> Android Auto, driving mode,Others</string>
     <!-- Summary for Connected devices settings, explaning a few important settings under it [CHAR LIMIT=NONE]-->
-    <string name="connected_devices_dashboard_android_auto_no_driving_mode_summary">Bluetooth, Android Auto, NFC</string>
+    <string name="connected_devices_dashboard_android_auto_no_driving_mode_summary">Android Auto, NFC,Others Services</string>
     <!-- Summary for Connected devices settings, explaning a few important settings under it [CHAR LIMIT=NONE]-->
-    <string name="connected_devices_dashboard_android_auto_no_nfc_no_driving_mode">Bluetooth, Android Auto</string>
+    <string name="connected_devices_dashboard_android_auto_no_nfc_no_driving_mode">Android Auto,Other Services</string>
     <!-- Summary for Tap & pay settings, explaning a few important settings under it [CHAR LIMIT=NONE]-->
     <string name="nfc_and_payment_settings_payment_off_nfc_off_summary">Unavailable because NFC is off</string>
     <!-- Summary for Tap & pay settings, explaning a few important settings under it [CHAR LIMIT=NONE]-->

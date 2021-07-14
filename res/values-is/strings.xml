@@ -3593,6 +3593,9 @@
     <string name="notification_channel_summary_low" msgid="5549662596677692000">"Ekkert hljóð eða titringur"</string>
     <string name="notification_conversation_summary_low" msgid="6352818857388412326">"Ekkert hljóð eða titringur og birtist neðar í samtalshluta"</string>
     <string name="notification_channel_summary_default" msgid="3674057458265438896">"Gæti hringt eða titrað eftir stillingum símans"</string>
+    <string name="notification_channel_summary_low_status" msgid="7866565328564018007">"Birtir tilkynningar með lítinn forgang. Alltaf án hljóðs."</string>
+    <string name="notification_channel_summary_low_lock" msgid="4009247523075328235">"Birtir tilkynningar með lítinn forgang. Alltaf án hljóðs."</string>
+    <string name="notification_channel_summary_low_status_lock" msgid="3668028634045057230">"Birtir tilkynningar með lítinn forgang. Alltaf án hljóðs."</string>
     <string name="notification_channel_summary_high" msgid="3411637309360617621">"Birta tilkynningar á borða efst á skjánum þegar tækið er opið"</string>
     <string name="notification_switch_label" msgid="8029371325967501557">"Allar tilkynningar frá „<xliff:g id="APP_NAME">%1$s</xliff:g>“"</string>
     <string name="notification_app_switch_label" msgid="4422902423925084193">"Allar tilkynningar frá <xliff:g id="APP_NAME">%1$s</xliff:g>"</string>
@@ -4965,4 +4968,10 @@
     <string name="keywords_media_controls" msgid="8345490568291778638">"margmiðlunarefni"</string>
     <string name="connected_device_see_all_summary" msgid="2056010318537268108">"Kveikt verður á Bluetooth"</string>
     <string name="aware_summary_when_bedtime_on" msgid="2063856008597376344">"Ekki í boði vegna þess að kveikt er á háttatímastillingu"</string>
+    <string name="bluetooth_message_access_notification_content" msgid="2986108412562309009">"Ótraust tæki vill fá aðgang að skilaboðunum þínum. Ýttu til að fá frekari upplýsingar."</string>
+    <string name="bluetooth_message_access_dialog_title" msgid="9009836130395061579">"Leyfa aðgang að skilaboðum?"</string>
+    <string name="bluetooth_message_access_dialog_content" msgid="2304761898608701739">"Ótraust Bluetooth-tæki, <xliff:g id="DEVICE_NAME_0">%1$s</xliff:g>, vill fá aðgang að skilaboðunum þínum.\n\nÞú hefur ekki tengst <xliff:g id="DEVICE_NAME_1">%2$s</xliff:g> áður."</string>
+    <string name="bluetooth_phonebook_access_notification_content" msgid="4280361621526852063">"Ótraust tæki vill fá aðgang að tengiliðunum þínum og símtalaskránni. Ýttu til að fá frekari upplýsingar."</string>
+    <string name="bluetooth_phonebook_access_dialog_title" msgid="7624607995928968721">"Leyfa aðgang að tengiliðum og símtalaskrá?"</string>
+    <string name="bluetooth_phonebook_access_dialog_content" msgid="4766700015848574532">"Ótraust Bluetooth-tæki, <xliff:g id="DEVICE_NAME_0">%1$s</xliff:g>, vill fá aðgang að tengiliðum þínum og símtalaskrá. Þetta felur í sér gögn um móttekin og hringd símtöl.\n\nÞú hefur ekki tengst <xliff:g id="DEVICE_NAME_1">%2$s</xliff:g> áður."</string>
 </resources>

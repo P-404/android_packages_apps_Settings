@@ -213,6 +213,7 @@
     <item msgid="8568003268185342352">"SPN"</item>
     <item msgid="1804537219968457989">"IMSI"</item>
     <item msgid="3441876902463317017">"GID"</item>
+    <item>ICCID</item>
   </string-array>
   <string-array name="app_install_location_entries">
     <item msgid="3771157789865587832">"Ichki xotira qurilmasi"</item>
@@ -437,7 +438,7 @@
   </string-array>
   <string-array name="security_settings_premium_sms_values">
     <item msgid="3985605994234635072">"So‘rash"</item>
-    <item msgid="2358187544264718285">"Hech qachon ruxsat berilmasin"</item>
+    <item msgid="2358187544264718285">"Ruxsat berilmasin"</item>
     <item msgid="7043782324123900484">"Har doim ruxsat berilsin"</item>
   </string-array>
   <string-array name="ram_states">

@@ -213,6 +213,7 @@
     <item msgid="8568003268185342352">"SPN"</item>
     <item msgid="1804537219968457989">"IMSI"</item>
     <item msgid="3441876902463317017">"GID"</item>
+    <item>ICCID</item>
   </string-array>
   <string-array name="app_install_location_entries">
     <item msgid="3771157789865587832">"内部存储设备"</item>
@@ -563,4 +564,10 @@
     <!-- no translation found for rtt_setting_mode:1 (7903019313228349427) -->
     <!-- no translation found for rtt_setting_mode:2 (8525285145696236811) -->
     <!-- no translation found for rtt_setting_mode:3 (7725394146877517088) -->
+    <string-array name="preferred_5g_network_mode_choices">
+        <item>NSA 模式</item>
+        <item>SA 模式</item>
+        <item>NSA + SA 模式</item>
+    </string-array>
+
 </resources>

@@ -26,6 +26,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources.NotFoundException;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ import android.provider.Telephony;
 import android.telephony.CarrierConfigManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.PreciseDataConnectionState;
+import android.telephony.ServiceState;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
@@ -53,12 +55,18 @@ import android.widget.Toast;
 
 import androidx.preference.Preference;
 import androidx.preference.PreferenceGroup;
+import com.android.ims.ImsManager;
 
 import com.android.settings.R;
 import com.android.settings.RestrictedSettingsFragment;
 import com.android.settingslib.RestrictedLockUtils.EnforcedAdmin;
+import com.android.settings.Utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class ApnSettings extends RestrictedSettingsFragment
         implements Preference.OnPreferenceChangeListener {
@@ -83,6 +91,8 @@ public class ApnSettings extends RestrictedSettingsFragment
             Telephony.Carriers.MVNO_TYPE,
             Telephony.Carriers.MVNO_MATCH_DATA,
             Telephony.Carriers.EDITED_STATUS,
+            Telephony.Carriers.BEARER,
+            Telephony.Carriers.BEARER_BITMASK,
     };
 
     private static final int ID_INDEX = 0;
@@ -92,6 +102,8 @@ public class ApnSettings extends RestrictedSettingsFragment
     private static final int MVNO_TYPE_INDEX = 4;
     private static final int MVNO_MATCH_DATA_INDEX = 5;
     private static final int EDITED_INDEX = 6;
+    private static final int BEARER_INDEX = 7;
+    private static final int BEARER_BITMASK_INDEX = 8;
 
     private static final int MENU_NEW = Menu.FIRST;
     private static final int MENU_RESTORE = Menu.FIRST + 1;
@@ -126,6 +138,16 @@ public class ApnSettings extends RestrictedSettingsFragment
     private boolean mHideImsApn;
     private boolean mAllowAddingApns;
     private boolean mHidePresetApnDetails;
+
+    private String[] mHideApnsWithRule;
+    private String[] mHideApnsWithIccidRule;
+    private PersistableBundle mHideApnsGroupByIccid;
+    private final static String INCLUDE_COMMON_RULES = "include_common_rules";
+    private final static String APN_HIDE_RULE_STRINGS_ARRAY= "apn_hide_rule_strings_array";
+    private final static String APN_HIDE_RULE_STRINGS_WITH_ICCIDS_ARRAY = "apn_hide_rule_strings_with_iccids_array";
+
+    private final static String ACTION_VOLTE_ENABLED_STATE_CHANGED
+            = "org.codeaurora.intent.action.ACTION_ENHANCE_4G_SWITCH";
 
     public ApnSettings() {
         super(UserManager.DISALLOW_CONFIG_MOBILE_NETWORKS);
@@ -164,6 +186,12 @@ public class ApnSettings extends RestrictedSettingsFragment
                     restartPhoneStateListener(mSubId);
                 }
                 fillList();
+            } else if (intent.getAction().equals(ACTION_VOLTE_ENABLED_STATE_CHANGED)) {
+                if (!mRestoreDefaultApnMode) {
+                    fillList();
+                } else {
+                    showDialog(DIALOG_RESTORE_DEFAULTAPN);
+                }
             }
         }
     };
@@ -200,6 +228,9 @@ public class ApnSettings extends RestrictedSettingsFragment
         mPhoneId = SubscriptionUtil.getPhoneId(activity, mSubId);
         mIntentFilter = new IntentFilter(
                 TelephonyManager.ACTION_SUBSCRIPTION_CARRIER_IDENTITY_CHANGED);
+        if (Utils.isSupportCTPA(getActivity().getApplicationContext())) {
+            mIntentFilter.addAction(ACTION_VOLTE_ENABLED_STATE_CHANGED);
+        }
 
         setIfOnlyAvailableForAdmins(true);
 
@@ -211,6 +242,14 @@ public class ApnSettings extends RestrictedSettingsFragment
         final PersistableBundle b = configManager.getConfigForSubId(mSubId);
         mHideImsApn = b.getBoolean(CarrierConfigManager.KEY_HIDE_IMS_APN_BOOL);
         mAllowAddingApns = b.getBoolean(CarrierConfigManager.KEY_ALLOW_ADDING_APNS_BOOL);
+
+        mHideApnsWithRule = b.getStringArray(APN_HIDE_RULE_STRINGS_ARRAY);
+        mHideApnsWithIccidRule = b.getStringArray(APN_HIDE_RULE_STRINGS_WITH_ICCIDS_ARRAY);
+        if(mSubscriptionInfo != null){
+           String iccid = mSubscriptionInfo.getIccId();
+           Log.d(TAG, "iccid: " + iccid);
+           mHideApnsGroupByIccid = b.getPersistableBundle(iccid);
+        }
         if (mAllowAddingApns) {
             final String[] readOnlyApnTypes = b.getStringArray(
                     CarrierConfigManager.KEY_READ_ONLY_APN_TYPES_STRING_ARRAY);
@@ -303,9 +342,17 @@ public class ApnSettings extends RestrictedSettingsFragment
                 new StringBuilder("NOT (type='ia' AND (apn=\"\" OR apn IS NULL)) AND "
                 + "user_visible!=0");
 
-        if (mHideImsApn) {
+        int phoneId = SubscriptionManager.getPhoneId(subId);
+        Context appContext = getActivity().getApplicationContext();
+        boolean isVoLTEEnabled = ImsManager.getInstance(appContext, phoneId)
+                .isEnhanced4gLteModeSettingEnabledByUser();
+        if (mHideImsApn || (Utils.isSupportCTPA(appContext) && !isVoLTEEnabled)) {
             where.append(" AND NOT (type='ims')");
         }
+
+        appendFilter(where);
+
+        Log.d(TAG, "where = " + where.toString());
 
         final Cursor cursor = getContentResolver().query(simApnUri,
                 CARRIERS_PROJECTION, where.toString(), null,
@@ -319,9 +366,13 @@ public class ApnSettings extends RestrictedSettingsFragment
             final ArrayList<ApnPreference> mmsApnList = new ArrayList<ApnPreference>();
 
             mSelectedKey = getSelectedApnKey();
+
+            // ApnPreference.mSelectedKey static variable is shared for MSim case,
+            // need be initialized according to preferred apn id per sub
+            ApnPreference.setSelectedKey(mSelectedKey);
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                final String name = cursor.getString(NAME_INDEX);
+                String name = cursor.getString(NAME_INDEX);
                 final String apn = cursor.getString(APN_INDEX);
                 final String key = cursor.getString(ID_INDEX);
                 final String type = cursor.getString(TYPES_INDEX);
@@ -329,6 +380,26 @@ public class ApnSettings extends RestrictedSettingsFragment
                 mMvnoType = cursor.getString(MVNO_TYPE_INDEX);
                 mMvnoMatchData = cursor.getString(MVNO_MATCH_DATA_INDEX);
 
+                //Special requirement of some operators, need change APN name follow language.
+                String localizedName = Utils.getLocalizedName(getActivity(), cursor.getString(NAME_INDEX));
+
+                if (!TextUtils.isEmpty(localizedName)) {
+                    name = localizedName;
+                }
+                int bearer = cursor.getInt(BEARER_INDEX);
+                int bearerBitMask = cursor.getInt(BEARER_BITMASK_INDEX);
+                int fullBearer = ServiceState.getBitmaskForTech(bearer) | bearerBitMask;
+                int radioTech = networkTypeToRilRidioTechnology(TelephonyManager.getDefault()
+                        .getDataNetworkType(subId));
+                if (!ServiceState.bitmaskHasTech(fullBearer, radioTech)
+                        && (bearer != 0 || bearerBitMask != 0)) {
+                    // In OOS, show APN with bearer as default
+                    if ((radioTech != ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN) || (bearer == 0
+                            && radioTech == ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN)) {
+                        cursor.moveToNext();
+                        continue;
+                    }
+                }
                 final ApnPreference pref = new ApnPreference(getPrefContext());
 
                 pref.setKey(key);
@@ -342,7 +413,10 @@ public class ApnSettings extends RestrictedSettingsFragment
                     pref.setSummary(apn);
                 }
 
-                final boolean selectable = ((type == null) || !type.equals("mms"));
+                boolean selectable = ((type == null) || type.contains("default"));
+                if (isVoLTEEnabled && selectable && Utils.isSupportCTPA(appContext)) {
+                    selectable = ((type == null) || !type.equals("ims"));
+                }
                 pref.setSelectable(selectable);
                 if (selectable) {
                     if ((mSelectedKey != null) && mSelectedKey.equals(key)) {
@@ -362,6 +436,150 @@ public class ApnSettings extends RestrictedSettingsFragment
             for (Preference preference : mmsApnList) {
                 apnPrefList.addPreference(preference);
             }
+        }
+    }
+
+    private void appendFilter(StringBuilder where){
+        boolean includeCommon = true;
+        if(mHideApnsGroupByIccid != null && !mHideApnsGroupByIccid.isEmpty()){
+           // APN hidden rules according to the specified iccid,
+           // it should be configured in CarrierConfig as below.
+           // <map name="12345">
+           //    <string name="type">fota</string>
+           //    <boolean name="include_common_rules" value="true"/>
+           // </map>
+           includeCommon = mHideApnsGroupByIccid.getBoolean(INCLUDE_COMMON_RULES, true);
+           Log.d(TAG, "apn hidden rules specified iccid, include common rule: " + includeCommon);
+           Set<String> keys = mHideApnsGroupByIccid.keySet();
+           for(String key : keys){
+              if(Utils.carrierTableFieldValidate(key)){
+                 String value = mHideApnsGroupByIccid.getString(key);
+                 if(value != null){
+                    where.append(" AND " + key + " <> \"" + value + "\"");
+                 }
+              }
+           }
+        }
+
+        // Some operator have special APN hidden rules group by iccids,
+        // it should be configured in CarrierConfig as below,
+        // it maybe overwrite some rules defined in common rules.
+        // <string-array name="apn_hide_rule_strings_with_iccids_array" num="6">
+        //    <item value="iccid"/>
+        //    <item value="1111,2222"/>
+        //    <item value="type"/>
+        //    <item value="ims,emergency"/>
+        //    <item value="include_common_rules"/>
+        //    <item value="true"/>
+        // </string-array>
+        if(mHideApnsWithIccidRule != null){
+            HashMap<String, String> ruleWithIccid = getApnRuleMap(mHideApnsWithIccidRule);
+            final String iccid = mSubscriptionInfo == null ? "" : mSubscriptionInfo.getIccId();
+            if(isOperatorIccid(ruleWithIccid, iccid)){
+                String s = ruleWithIccid.get(INCLUDE_COMMON_RULES);
+                includeCommon = !(s != null && s.equalsIgnoreCase(String.valueOf(false)));
+                Log.d(TAG, "apn hidden rules in iccids, include common rule: " + includeCommon);
+                filterWithKey(ruleWithIccid, where);
+            }
+        }
+
+        if(includeCommon){
+            // Common APN hidden rules,
+            // it should be configured in CarrierConfig as below.
+            // <string-array name="apn_default_values_strings_array" num="2">
+            //    <item value="type"/>
+            //    <item value="fota"/>
+            // </string-array>
+            if(mHideApnsWithRule != null){
+               HashMap<String, String> rule = getApnRuleMap(mHideApnsWithRule);
+               filterWithKey(rule, where);
+            }
+        }
+    }
+
+    private void filterWithKey(Map<String, String> rules, StringBuilder where) {
+        Set<String> fields = rules.keySet();
+        for(String field : fields){
+            if(Utils.carrierTableFieldValidate(field)){
+                String value = rules.get(field);
+                if(!TextUtils.isEmpty(value)){
+                    String[] subValues = value.split(",");
+                    for(String subValue : subValues){
+                        where.append(" AND " + field + " <> \"" + subValue + "\"");
+                    }
+                }
+            }
+        }
+    }
+
+    private HashMap<String, String> getApnRuleMap(String[] ruleArray) {
+        HashMap<String, String> rules = new HashMap<String, String>();
+        if (ruleArray != null) {
+            int length = ruleArray.length;
+            Log.d(TAG, "ruleArray size = " + length);
+            if (length > 0 && (length % 2 == 0)) {
+                for (int i = 0; i < length;) {
+                    rules.put(ruleArray[i].toLowerCase(), ruleArray[i + 1]);
+                    i += 2;
+                }
+            }
+        }
+        return rules;
+    }
+
+    private boolean isOperatorIccid(HashMap<String, String> ruleMap, String iccid) {
+        String valuesOfIccid = ruleMap.get("iccid");
+        if (!TextUtils.isEmpty(valuesOfIccid)) {
+            String[] iccids = valuesOfIccid.split(",");
+            for (String subIccid : iccids) {
+                if (iccid.startsWith(subIccid.trim())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private int networkTypeToRilRidioTechnology(int nt) {
+        switch(nt) {
+            case TelephonyManager.NETWORK_TYPE_GPRS:
+                return ServiceState.RIL_RADIO_TECHNOLOGY_GPRS;
+            case TelephonyManager.NETWORK_TYPE_EDGE:
+                return ServiceState.RIL_RADIO_TECHNOLOGY_EDGE;
+            case TelephonyManager.NETWORK_TYPE_UMTS:
+                return ServiceState.RIL_RADIO_TECHNOLOGY_UMTS;
+            case TelephonyManager.NETWORK_TYPE_HSDPA:
+                return ServiceState.RIL_RADIO_TECHNOLOGY_HSDPA;
+            case TelephonyManager.NETWORK_TYPE_HSUPA:
+                return ServiceState.RIL_RADIO_TECHNOLOGY_HSUPA;
+            case TelephonyManager.NETWORK_TYPE_HSPA:
+                return ServiceState.RIL_RADIO_TECHNOLOGY_HSPA;
+            case TelephonyManager.NETWORK_TYPE_CDMA:
+                return ServiceState.RIL_RADIO_TECHNOLOGY_IS95B;
+            case TelephonyManager.NETWORK_TYPE_1xRTT:
+                return ServiceState.RIL_RADIO_TECHNOLOGY_1xRTT;
+            case TelephonyManager.NETWORK_TYPE_EVDO_0:
+                return ServiceState.RIL_RADIO_TECHNOLOGY_EVDO_0;
+            case TelephonyManager.NETWORK_TYPE_EVDO_A:
+                return ServiceState.RIL_RADIO_TECHNOLOGY_EVDO_A;
+            case TelephonyManager.NETWORK_TYPE_EVDO_B:
+                return ServiceState.RIL_RADIO_TECHNOLOGY_EVDO_B;
+            case TelephonyManager.NETWORK_TYPE_EHRPD:
+                return ServiceState.RIL_RADIO_TECHNOLOGY_EHRPD;
+            case TelephonyManager.NETWORK_TYPE_LTE:
+                return ServiceState.RIL_RADIO_TECHNOLOGY_LTE;
+            case TelephonyManager.NETWORK_TYPE_HSPAP:
+                return ServiceState.RIL_RADIO_TECHNOLOGY_HSPAP;
+            case TelephonyManager.NETWORK_TYPE_GSM:
+                return ServiceState.RIL_RADIO_TECHNOLOGY_GSM;
+            case TelephonyManager.NETWORK_TYPE_TD_SCDMA:
+                return ServiceState.RIL_RADIO_TECHNOLOGY_TD_SCDMA;
+            case TelephonyManager.NETWORK_TYPE_IWLAN:
+                return ServiceState.RIL_RADIO_TECHNOLOGY_IWLAN;
+            case TelephonyManager.NETWORK_TYPE_LTE_CA:
+                return ServiceState.RIL_RADIO_TECHNOLOGY_LTE_CA;
+            default:
+                return ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN;
         }
     }
 

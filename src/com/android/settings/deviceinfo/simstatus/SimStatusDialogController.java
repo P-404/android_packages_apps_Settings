@@ -153,6 +153,7 @@ public class SimStatusDialogController implements LifecycleObserver, OnResume, O
     private final Context mContext;
 
     private boolean mShowLatestAreaInfo;
+    private boolean mIsRegisteredListener = false;
 
     private final BroadcastReceiver mAreaInfoReceiver = new BroadcastReceiver() {
         @Override
@@ -228,7 +229,8 @@ public class SimStatusDialogController implements LifecycleObserver, OnResume, O
         if (mSubscriptionInfo == null) {
             return;
         }
-
+        mTelephonyManager =
+            mTelephonyManager.createForSubscriptionId(mSubscriptionInfo.getSubscriptionId());
         mPhoneStateListener = getPhoneStateListener();
         updateLatestAreaInfo();
         updateSubscriptionStatus();
@@ -283,11 +285,22 @@ public class SimStatusDialogController implements LifecycleObserver, OnResume, O
             mContext.registerReceiver(mAreaInfoReceiver,
                     new IntentFilter(CellBroadcastIntents.ACTION_AREA_INFO_UPDATED));
         }
+
+        mIsRegisteredListener = true;
     }
 
     @Override
     public void onPause() {
         if (mSubscriptionInfo == null) {
+            if (mIsRegisteredListener) {
+                mSubscriptionManager.removeOnSubscriptionsChangedListener(
+                        mOnSubscriptionsChangedListener);
+                mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
+                if (mShowLatestAreaInfo) {
+                    mContext.unregisterReceiver(mAreaInfoReceiver);
+                }
+                mIsRegisteredListener = false;
+            }
             return;
         }
 

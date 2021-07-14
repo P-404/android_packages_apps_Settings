@@ -192,7 +192,6 @@
             <intent-filter android:priority="1">
                 <action android:name="android.settings.WIRELESS_SETTINGS" />
                 <action android:name="android.settings.AIRPLANE_MODE_SETTINGS" />
-                <action android:name="com.android.settings.sim.SIM_SUB_INFO_SETTINGS" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
@@ -905,6 +904,36 @@
                 android:value="com.android.settings.DisplaySettings" />
             <meta-data android:name="com.android.settings.PRIMARY_PROFILE_CONTROLLED"
                 android:value="true" />
+        </activity>
+
+        <!-- Keep compatibility with old shortcuts. -->
+        <activity-alias android:name="DisplaySettings"
+                android:label="@string/display_settings"
+                android:exported="true"
+                android:targetActivity="Settings$DisplaySettingsActivity">
+            <meta-data android:name="com.android.settings.FRAGMENT_CLASS"
+                android:value="com.android.settings.DisplaySettings" />
+        </activity-alias>
+            <activity android:name="Settings$SMQQtiFeedbackActivity"
+                android:label="@string/qtifeedback_settings_title"
+                android:icon="@drawable/ic_settings_qti_feedback"
+                android:enabled="false"
+                android:taskAffinity="">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter android:priority="250">
+                <action android:name="com.android.settings.action.SETTINGS" />
+            </intent-filter>
+            <meta-data android:name="com.android.settings.category"
+                android:value="com.android.settings.category.ia.system" />
+            <meta-data android:name="com.android.settings.FRAGMENT_CLASS"
+                android:value="@string/qtifeedback_intent_action" />
+            <meta-data android:name="com.android.settings.PRIMARY_PROFILE_CONTROLLED"
+                android:value="true" />
+            <meta-data android:name="com.android.settings.summary"
+                android:resource="@string/qtifeedback_settings_subtitle" />
         </activity>
 
         <activity
@@ -2700,6 +2729,27 @@
             android:exported="false"/>
 
         <activity
+            android:name="Settings$SimSettingsActivity"
+            android:label="@string/sim_settings_title"
+            android:icon="@drawable/ic_settings_sim"
+            android:parentActivityName="Settings">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.android.settings.action.SETTINGS" />
+            </intent-filter>
+            <meta-data android:name="com.android.settings.order" android:value="-2"/>
+            <meta-data android:name="com.android.settings.category"
+                android:value="com.android.settings.category.ia.wireless" />
+            <meta-data android:name="com.android.settings.summary"
+                android:resource="@string/summary_empty"/>
+            <meta-data android:name="com.android.settings.FRAGMENT_CLASS"
+                android:value="com.android.settings.sim.SimSettings" />
+        </activity>
+
+        <activity
             android:name=".wifi.RequestToggleWiFiActivity"
             android:theme="@android:style/Theme.DeviceDefault.Light.Dialog.Alert"
             android:excludeFromRecents="true"
@@ -3420,6 +3470,24 @@
                 <action android:name="com.android.settings.action.LAUNCH_BLUETOOTH_PAIRING"/>
             </intent-filter>/>
         </receiver>
+
+       <activity android:name=".network.telephony.UserPLMNListActivity"
+           android:exported="true"
+           android:label="@string/uplmn_settings_title"
+           android:configChanges="orientation|screenSize|keyboardHidden">
+           <intent-filter>
+               <action android:name="android.intent.action.MAIN" />
+           </intent-filter>
+       </activity>
+
+        <activity android:name=".network.telephony.UserPLMNEditorActivity"
+            android:exported="true"
+            android:label="@string/uplmn_settings_title"
+            android:configChanges="orientation|screenSize|keyboardHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
 
         <!-- This is the longest AndroidManifest.xml ever. -->
     </application>

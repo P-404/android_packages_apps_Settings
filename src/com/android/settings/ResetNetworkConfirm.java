@@ -19,6 +19,7 @@ package com.android.settings;
 import static com.android.settingslib.RestrictedLockUtils.EnforcedAdmin;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.settings.SettingsEnums;
 import android.bluetooth.BluetoothAdapter;
@@ -45,12 +46,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.VisibleForTesting;
-import androidx.appcompat.app.AlertDialog;
 
 import com.android.settings.core.InstrumentedFragment;
 import com.android.settings.enterprise.ActionDisabledByAdminDialogHelper;
 import com.android.settings.network.ApnSettings;
 import com.android.settingslib.RestrictedLockUtilsInternal;
+import com.android.settingslib.bluetooth.CachedBluetoothDeviceManager;
+import com.android.settingslib.bluetooth.LocalBluetoothManager;
 
 /**
  * Confirm and execute a reset of the network settings to a clean "just out of the box"
@@ -126,6 +128,13 @@ public class ResetNetworkConfirm extends InstrumentedFragment {
                 BluetoothAdapter btAdapter = btManager.getAdapter();
                 if (btAdapter != null) {
                     btAdapter.factoryReset();
+                    LocalBluetoothManager mLocalBtManager =
+                                      LocalBluetoothManager.getInstance(mContext, null);
+                    if (mLocalBtManager != null) {
+                        CachedBluetoothDeviceManager cachedDeviceManager =
+                                            mLocalBtManager.getCachedDeviceManager();
+                        cachedDeviceManager.clearAllDevices();
+                    }
                 }
             }
 

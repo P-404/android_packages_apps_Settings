@@ -272,10 +272,30 @@
         android:title="@string/debug_networking_category"
         android:order="400">
 
+        <com.android.settings.widget.AddPreference
+            android:key="prefer_5G_nr_mode"
+            android:title="@string/prefer_5G_nr_mode_title"
+            settings:controller="com.android.settings.development.Prefer5GNetworkSummaryController" />
+
         <SwitchPreference
             android:key="wifi_display_certification"
             android:title="@string/wifi_display_certification"
             android:summary="@string/wifi_display_certification_summary" />
+
+        <SwitchPreference
+            android:key="wifi_coverage_extend"
+            android:title="@string/wifi_coverage_extend"
+            android:summary="@string/wifi_coverage_extend_summary" />
+
+        <SwitchPreference
+            android:key="softap_ocv"
+            android:title="@string/softap_ocv"
+            android:summary="@string/softap_ocv_summary" />
+
+        <SwitchPreference
+            android:key="softap_beacon_protection"
+            android:title="@string/softap_beacon_protection"
+            android:summary="@string/softap_beacon_protection_summary" />
 
         <SwitchPreference
             android:key="wifi_verbose_logging"
@@ -286,6 +306,16 @@
             android:key="wifi_scan_throttling"
             android:title="@string/wifi_scan_throttling"
             android:summary="@string/wifi_scan_throttling_summary" />
+
+        <SwitchPreference
+            android:key="wifi_whitelist_roaming"
+            android:title="@string/wifi_whitelist_roaming"
+            android:summary="@string/wifi_whitelist_roaming_summary" />
+
+        <SwitchPreference
+            android:key="wifi_new_network_auto_connection"
+            android:title="@string/wifi_new_network_auto_connection"
+            android:summary="@string/wifi_new_network_auto_connection_summary" />
 
         <SwitchPreference
             android:key="wifi_enhanced_mac_randomization"

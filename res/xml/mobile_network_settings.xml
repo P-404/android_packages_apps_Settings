@@ -37,10 +37,15 @@
             android:selectable="false"/>
 
         <ListPreference
+            android:key="data_preference"
+            android:title="@string/data_preference"
+            settings:controller="com.android.settings.network.telephony.DataDefaultSubscriptionController"
+            settings:allowDividerAbove="true"/>
+
+        <ListPreference
             android:key="calls_preference"
             android:title="@string/calls_preference"
-            settings:controller="com.android.settings.network.telephony.CallsDefaultSubscriptionController"
-            settings:allowDividerAbove="true"/>
+            settings:controller="com.android.settings.network.telephony.CallsDefaultSubscriptionController"/>
 
         <ListPreference
             android:key="sms_preference"
@@ -107,7 +112,6 @@
             android:summary="@string/enhanced_4g_lte_mode_summary_4g_calling"
             settings:keywords="@string/keywords_enhance_4g_lte"
             settings:controller="com.android.settings.network.telephony.Enhanced4gCallingPreferenceController"/>
-
         <SwitchPreference
             android:key="advance_call"
             android:title="@string/enhanced_4g_lte_mode_title_advanced_calling"
@@ -115,6 +119,11 @@
             android:summary="@string/enhanced_4g_lte_mode_summary"
             settings:keywords="@string/keywords_enhance_4g_lte"
             settings:controller="com.android.settings.network.telephony.Enhanced4gAdvancedCallingPreferenceController"/>
+        <SwitchPreference
+            android:key="enabled_5g"
+            android:title="@string/enabled_5g_mode_title"
+            android:persistent="true"
+            settings:controller="com.android.settings.network.telephony.Enabled5GPreferenceController"/>
 
         <SwitchPreference
             android:key="contact_discovery_opt_in"
@@ -172,7 +181,6 @@
                 android:title="@string/video_calling_settings_title"
                 android:persistent="true"
                 settings:controller="com.android.settings.network.telephony.VideoCallingPreferenceController"/>
-
         </PreferenceCategory>
 
         <com.android.settings.network.telephony.cdma.CdmaListPreference
@@ -217,6 +225,15 @@
             android:title="@string/mobile_network_apn_title"
             settings:allowDividerAbove="true"
             settings:controller="com.android.settings.network.telephony.ApnPreferenceController"/>
+
+        <PreferenceScreen
+            android:key="uplmn_settings_key"
+            android:persistent="false"
+            android:title="@string/uplmn_settings_title"
+            android:summary="@string/uplmn_settings_summary"
+            settings:allowDividerAbove="true"
+            settings:controller="com.android.settings.network.telephony.UserPLMNPreferenceController">
+        </PreferenceScreen>
 
         <Preference
             android:key="carrier_settings_key"

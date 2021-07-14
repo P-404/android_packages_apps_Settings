@@ -27,6 +27,7 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.format.Formatter;
 import android.text.style.RelativeSizeSpan;
+import android.util.Log;
 
 import androidx.annotation.VisibleForTesting;
 import androidx.preference.Preference;
@@ -95,7 +96,19 @@ public class DataUsageSummary extends DataUsageBaseFragment implements DataUsage
         }
         boolean hasWifiRadio = DataUsageUtils.hasWifiRadio(context);
         if (hasMobileData) {
-            addMobileSection(defaultSubId);
+            List<SubscriptionInfo> subscriptions =
+                    services.mSubscriptionManager.getActiveSubscriptionInfoList();
+            if (subscriptions == null || subscriptions.size() == 0) {
+                addMobileSection(defaultSubId);
+            }
+            for (int i = 0; subscriptions != null && i < subscriptions.size(); i++) {
+                SubscriptionInfo subInfo = subscriptions.get(i);
+                if (subscriptions.size() > 1) {
+                    addMobileSection(subInfo.getSubscriptionId(), subInfo);
+                } else {
+                    addMobileSection(subInfo.getSubscriptionId());
+                }
+            }
             if (hasActiveSubscription() && hasWifiRadio) {
                 // If the device has active SIM, the data usage section shows usage for mobile,
                 // and the WiFi section is added if there is a WiFi radio - legacy behavior.

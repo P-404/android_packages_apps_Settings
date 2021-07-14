@@ -221,6 +221,10 @@ public class WifiDppQrCodeScannerFragment extends WifiDppQrCodeBaseFragment impl
     private boolean isReachableWifiNetwork(WifiConfiguration wifiConfiguration) {
         final List<AccessPoint> scannedAccessPoints = mWifiTracker.getAccessPoints();
 
+        // hidden network visibility is known at later stage (next scan)
+        if (wifiConfiguration.hiddenSSID)
+            return true;
+
         for (AccessPoint scannedAccessPoint : scannedAccessPoints) {
             if (scannedAccessPoint.matches(wifiConfiguration) &&
                     scannedAccessPoint.isReachable()) {
@@ -420,7 +424,7 @@ public class WifiDppQrCodeScannerFragment extends WifiDppQrCodeBaseFragment impl
 
     @Override
     public Rect getFramePosition(Size previewSize, int cameraOrientation) {
-        return new Rect(0, 0, previewSize.getHeight(), previewSize.getHeight());
+        return new Rect(0, 0, previewSize.getWidth(), previewSize.getHeight());
     }
 
     @Override

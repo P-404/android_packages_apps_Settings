@@ -3593,6 +3593,9 @@
     <string name="notification_channel_summary_low" msgid="5549662596677692000">"ხმისა და ვიბრაციის გარეშე"</string>
     <string name="notification_conversation_summary_low" msgid="6352818857388412326">"ხმისა და ვიბრაციის გარეშე, ჩნდება მიმოწერების სექციის ქვედა ნაწილში"</string>
     <string name="notification_channel_summary_default" msgid="3674057458265438896">"დარეკვა ან ვიბრაცია ტელეფონის პარამეტრების მიხედვით"</string>
+    <string name="notification_channel_summary_low_status" msgid="7866565328564018007">"აჩვენებს ნაკლებად პრიორიტეტულ შეტყობინებებს. ყოველთვის ჩუმია."</string>
+    <string name="notification_channel_summary_low_lock" msgid="4009247523075328235">"აჩვენებს ნაკლებად პრიორიტეტულ შეტყობინებებს. ყოველთვის ჩუმია."</string>
+    <string name="notification_channel_summary_low_status_lock" msgid="3668028634045057230">"აჩვენებს ნაკლებად პრიორიტეტულ შეტყობინებებს. ყოველთვის ჩუმია."</string>
     <string name="notification_channel_summary_high" msgid="3411637309360617621">"როცა მოწყობილობა განბლოკილია, შეტყობინებები გამოჩნდეს ეკრანის ზედა ნაწილზე გადაჭიმული ბანერის სახით"</string>
     <string name="notification_switch_label" msgid="8029371325967501557">"„<xliff:g id="APP_NAME">%1$s</xliff:g>“-ის ყველა შეტყობინება"</string>
     <string name="notification_app_switch_label" msgid="4422902423925084193">"<xliff:g id="APP_NAME">%1$s</xliff:g>-ის ყველა შეტყობინება"</string>
@@ -4965,4 +4968,10 @@
     <string name="keywords_media_controls" msgid="8345490568291778638">"მედია"</string>
     <string name="connected_device_see_all_summary" msgid="2056010318537268108">"ჩაირთვება Bluetooth"</string>
     <string name="aware_summary_when_bedtime_on" msgid="2063856008597376344">"მიუწვდომელია, რადგან ჩართულია ძილის დროის რეჟიმი"</string>
+    <string name="bluetooth_message_access_notification_content" msgid="2986108412562309009">"არასანდო მოწყობილობას თქვენს შეტყობინებებზე წვდომა სურს. შეეხეთ დეტალების სანახავად."</string>
+    <string name="bluetooth_message_access_dialog_title" msgid="9009836130395061579">"დაუშვებთ შეტყობინებებზე წვდომას?"</string>
+    <string name="bluetooth_message_access_dialog_content" msgid="2304761898608701739">"არასანდო Bluetooth მოწყობილობას, <xliff:g id="DEVICE_NAME_0">%1$s</xliff:g>, თქვენს შეტყობინებებზე წვდომა სურს.\n\nაქამდე <xliff:g id="DEVICE_NAME_1">%2$s</xliff:g>-ს არ დაკავშირებიხართ."</string>
+    <string name="bluetooth_phonebook_access_notification_content" msgid="4280361621526852063">"არასანდო მოწყობილობას თქვენს კონტაქტებსა და ზარების ჟურნალზე წვდომა სურს. შეეხეთ დეტალების სანახავად."</string>
+    <string name="bluetooth_phonebook_access_dialog_title" msgid="7624607995928968721">"დაუშვებთ წვდომას კონტაქტებსა და ზარების ჟურნალზე?"</string>
+    <string name="bluetooth_phonebook_access_dialog_content" msgid="4766700015848574532">"არასანდო Bluetooth მოწყობილობას, <xliff:g id="DEVICE_NAME_0">%1$s</xliff:g>, თქვენს კონტაქტებსა და ზარების ჟურნალზე წვდომა სურს. ეს მოიცავს მონაცემებს შემომავალი და გამავალი ზარების შესახებ.\n\nაქამდე <xliff:g id="DEVICE_NAME_1">%2$s</xliff:g>-ს არ დაკავშირებიხართ."</string>
 </resources>

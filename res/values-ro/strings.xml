@@ -3642,6 +3642,9 @@
     <string name="notification_conversation_summary_low" msgid="6352818857388412326">"Fără sunet sau vibrații și apare în partea de jos a secțiunii de conversație"</string>
     <string name="notification_channel_summary_default" msgid="3674057458265438896">"Poate să sune sau să vibreze, în funcție de setările telefonului"</string>
     <string name="notification_channel_summary_high" msgid="3411637309360617621">"Când dispozitivul este deblocat, afișează notificările ca un banner în partea de sus a ecranului"</string>
+    <string name="notification_channel_summary_low_status" msgid="7866565328564018007">"Se afișează sub notificările prioritare. Întotdeauna silențios."</string>
+    <string name="notification_channel_summary_low_lock" msgid="4009247523075328235">"Se afișează sub notificările prioritare. Întotdeauna silențios."</string>
+    <string name="notification_channel_summary_low_status_lock" msgid="3668028634045057230">"Se afișează sub notificările prioritare. Întotdeauna silențios."</string>
     <string name="notification_switch_label" msgid="8029371325967501557">"Toate notificările din „<xliff:g id="APP_NAME">%1$s</xliff:g>”"</string>
     <string name="notification_app_switch_label" msgid="4422902423925084193">"Toate notificările din <xliff:g id="APP_NAME">%1$s</xliff:g>"</string>
     <string name="default_notification_assistant" msgid="243718059890346442">"Notificări adaptive"</string>
@@ -4884,8 +4887,8 @@
     <string name="mobile_network_list_add_more" msgid="4478586073355236604">"Adăugați mai multe"</string>
     <string name="mobile_network_active_sim" msgid="6397581267971410039">"Activ/SIM"</string>
     <string name="mobile_network_inactive_sim" msgid="5829757490580409899">"Inactiv/SIM"</string>
-    <string name="mobile_network_active_esim" msgid="4673190244386572318">"Activ/SIM-ul descărcat"</string>
-    <string name="mobile_network_inactive_esim" msgid="2901035056727849007">"Inactiv/SIM descărcat"</string>
+    <string name="mobile_network_active_esim" msgid="4673190244386572318">"Activ / SIM descărcat"</string>
+    <string name="mobile_network_inactive_esim" msgid="2901035056727849007">"Inactiv / SIM descărcat"</string>
     <string name="mobile_network_sim_name" msgid="3187192894150386537">"Numele și culoarea cardului SIM"</string>
     <string name="mobile_network_sim_name_label" msgid="1452440641628369625">"Nume"</string>
     <string name="mobile_network_sim_color_label" msgid="5293944087609632340">"Culoare (folosită de aplicațiile compatibile)"</string>
@@ -5056,4 +5059,10 @@
     <string name="keywords_media_controls" msgid="8345490568291778638">"media"</string>
     <string name="connected_device_see_all_summary" msgid="2056010318537268108">"Bluetooth se va activa"</string>
     <string name="aware_summary_when_bedtime_on" msgid="2063856008597376344">"Indisponibil deoarece modul ora de culcare este activat"</string>
+    <string name="bluetooth_message_access_notification_content" msgid="2986108412562309009">"Un dispozitiv care nu prezintă încredere solicită acces la mesajele dvs. Atingeți pentru detalii."</string>
+    <string name="bluetooth_message_access_dialog_title" msgid="9009836130395061579">"Permiteți accesul la mesaje?"</string>
+    <string name="bluetooth_message_access_dialog_content" msgid="2304761898608701739">"Un dispozitiv Bluetooth care nu prezintă încredere, <xliff:g id="DEVICE_NAME_0">%1$s</xliff:g>, solicită acces la mesajele dvs.\n\nNu v-ați mai conectat la <xliff:g id="DEVICE_NAME_1">%2$s</xliff:g>."</string>
+    <string name="bluetooth_phonebook_access_notification_content" msgid="4280361621526852063">"Un dispozitiv care nu prezintă încredere solicită acces la agenda și jurnalul dvs. de apeluri. Atingeți pentru detalii."</string>
+    <string name="bluetooth_phonebook_access_dialog_title" msgid="7624607995928968721">"Permiteți accesul la agendă și la jurnalul de apeluri?"</string>
+    <string name="bluetooth_phonebook_access_dialog_content" msgid="4766700015848574532">"Un dispozitiv Bluetooth care nu prezintă încredere, <xliff:g id="DEVICE_NAME_0">%1$s</xliff:g>, solicită acces la agenda și jurnalul dvs. de apeluri. Aici sunt incluse date despre apelurile primite și efectuate.\n\nNu v-ați mai conectat la <xliff:g id="DEVICE_NAME_1">%2$s</xliff:g>."</string>
 </resources>

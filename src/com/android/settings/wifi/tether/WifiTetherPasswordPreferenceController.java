@@ -23,6 +23,8 @@ import android.content.Context;
 import android.net.wifi.SoftApConfiguration;
 import android.text.TextUtils;
 import android.util.FeatureFlagUtils;
+import android.widget.Toast;
+import android.util.Log;
 
 import androidx.annotation.VisibleForTesting;
 import androidx.preference.EditTextPreference;
@@ -36,6 +38,8 @@ import com.android.settings.wifi.WifiUtils;
 import com.android.settingslib.core.instrumentation.MetricsFeatureProvider;
 
 import java.util.UUID;
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.StandardCharsets;
 
 public class WifiTetherPasswordPreferenceController extends WifiTetherBasePreferenceController
         implements ValidatedEditTextPreference.Validator {
@@ -69,7 +73,8 @@ public class WifiTetherPasswordPreferenceController extends WifiTetherBasePrefer
     public void updateDisplay() {
         final SoftApConfiguration config = mWifiManager.getSoftApConfiguration();
         if (config == null
-                || (config.getSecurityType() == SoftApConfiguration.SECURITY_TYPE_WPA2_PSK
+                || ((config.getSecurityType() == SoftApConfiguration.SECURITY_TYPE_WPA2_PSK
+                     || config.getSecurityType() == SoftApConfiguration.SECURITY_TYPE_WPA3_SAE_TRANSITION)
                 && TextUtils.isEmpty(config.getPassphrase()))) {
             mPassword = generateRandomPassword();
         } else {
@@ -81,14 +86,23 @@ public class WifiTetherPasswordPreferenceController extends WifiTetherBasePrefer
         updatePasswordDisplay((EditTextPreference) mPreference);
     }
 
+    private boolean checkPasswordEncodable(String newPassword) {
+        final CharsetEncoder asciiEncoder = StandardCharsets.US_ASCII.newEncoder();
+        return asciiEncoder.canEncode(newPassword);
+    }
+
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         if (!TextUtils.equals(mPassword, (String) newValue)) {
             mMetricsFeatureProvider.action(mContext,
                     SettingsEnums.ACTION_SETTINGS_CHANGE_WIFI_HOTSPOT_PASSWORD);
         }
-        mPassword = (String) newValue;
-        updatePasswordDisplay((EditTextPreference) mPreference);
+        if (checkPasswordEncodable((String) newValue)) {
+            mPassword = (String) newValue;
+            updatePasswordDisplay((EditTextPreference) mPreference);
+        } else {
+            Log.e("WifiTetherPasswordPreference", "new Password can't ascii encode, keep the original password");
+        }
         mListener.onTetherConfigUpdated(this);
         return true;
     }
@@ -103,7 +117,8 @@ public class WifiTetherPasswordPreferenceController extends WifiTetherBasePrefer
      */
     public String getPasswordValidated(int securityType) {
         // don't actually overwrite unless we get a new config in case it was accidentally toggled.
-        if (securityType == SoftApConfiguration.SECURITY_TYPE_OPEN) {
+        if (securityType == SoftApConfiguration.SECURITY_TYPE_OPEN
+                || securityType == SoftApConfiguration.SECURITY_TYPE_OWE) {
             return "";
         } else if (!isTextValid(mPassword)) {
             mPassword = generateRandomPassword();
@@ -113,7 +128,8 @@ public class WifiTetherPasswordPreferenceController extends WifiTetherBasePrefer
     }
 
     public void updateVisibility(int securityType) {
-        mPreference.setVisible(securityType != SoftApConfiguration.SECURITY_TYPE_OPEN);
+        mPreference.setVisible(securityType != SoftApConfiguration.SECURITY_TYPE_OPEN
+                                   && securityType != SoftApConfiguration.SECURITY_TYPE_OWE);
     }
 
     @Override

@@ -213,6 +213,7 @@
     <item msgid="8568003268185342352">"SPN"</item>
     <item msgid="1804537219968457989">"IMSI"</item>
     <item msgid="3441876902463317017">"GID"</item>
+    <item>ICCID</item>
   </string-array>
   <string-array name="app_install_location_entries">
     <item msgid="3771157789865587832">"अंतर्गत डिव्हाइस स्टोरेज"</item>
@@ -429,7 +430,7 @@
   </string-array>
   <string-array name="vpn_states">
     <item msgid="2262719249581510939">"डिस्कनेक्ट केले"</item>
-    <item msgid="9141074028293812365">"प्रारंभ करत आहे…"</item>
+    <item msgid="9141074028293812365">"सुरू करत आहे…"</item>
     <item msgid="2234425878608626285">"कनेक्ट करत आहे..."</item>
     <item msgid="27547778933579155">"कनेक्ट केले"</item>
     <item msgid="893506841727300393">"टाइमआउट"</item>

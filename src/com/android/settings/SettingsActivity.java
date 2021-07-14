@@ -33,6 +33,8 @@ import android.content.res.Resources.Theme;
 import android.graphics.drawable.Icon;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.text.TextUtils;
@@ -60,6 +62,7 @@ import com.android.settings.core.gateway.SettingsGateway;
 import com.android.settings.dashboard.DashboardFeatureProvider;
 import com.android.settings.homepage.TopLevelSettings;
 import com.android.settings.overlay.FeatureFactory;
+import com.android.settings.Utils;
 import com.android.settings.wfd.WifiDisplaySettings;
 import com.android.settings.widget.SwitchBar;
 import com.android.settingslib.core.instrumentation.Instrumentable;
@@ -71,6 +74,8 @@ import com.google.android.setupcompat.util.WizardManagerHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.codeaurora.internal.IExtTelephony;
 
 
 public class SettingsActivity extends SettingsBaseActivity
@@ -153,6 +158,7 @@ public class SettingsActivity extends SettingsBaseActivity
 
     private CharSequence mInitialTitle;
     private int mInitialTitleResId;
+    private SmqSettings mSMQ;
 
     private BroadcastReceiver mDevelopmentSettingsListener;
 
@@ -244,6 +250,8 @@ public class SettingsActivity extends SettingsBaseActivity
         if (intent.hasExtra(EXTRA_UI_OPTIONS)) {
             getWindow().setUiOptions(intent.getIntExtra(EXTRA_UI_OPTIONS, 0));
         }
+
+        mSMQ = new SmqSettings(getApplicationContext());
 
         // Getting Intent properties can only be done after the super.onCreate(...)
         final String initialFragmentName = intent.getStringExtra(EXTRA_SHOW_FRAGMENT);
@@ -569,7 +577,29 @@ public class SettingsActivity extends SettingsBaseActivity
      */
     private Fragment switchToFragment(String fragmentName, Bundle args, boolean validate,
             int titleResId, CharSequence title) {
+        if (fragmentName.equals(getString(R.string.qtifeedback_intent_action))){
+             final Intent newIntent = new Intent(getString(R.string.qtifeedback_intent_action));
+             newIntent.addCategory("android.intent.category.DEFAULT");
+             startActivity(newIntent);
+             finish();
+             return null;
+        }
+
         Log.d(LOG_TAG, "Switching to fragment " + fragmentName);
+
+        if (fragmentName.equals("com.android.settings.sim.SimSettings")) {
+            if(Utils.isSimSettingsApkAvailable()) {
+                Log.i(LOG_TAG, "switchToFragment, launch simSettings");
+                Intent provisioningIntent =
+                        new Intent("com.android.settings.sim.SIM_SUB_INFO_SETTINGS");
+                if (!getPackageManager().queryIntentActivities(provisioningIntent, 0).isEmpty()) {
+                    startActivity(provisioningIntent);
+                }
+            }
+            finish();
+            return null;
+        }
+
         if (validate && !isValidFragment(fragmentName)) {
             throw new IllegalArgumentException("Invalid fragment for this activity: "
                     + fragmentName);
@@ -611,6 +641,10 @@ public class SettingsActivity extends SettingsBaseActivity
                 pm.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH), isAdmin)
                 || somethingChanged;
 
+        if(mSMQ.isShowSmqSettings()){
+            somethingChanged = setTileEnabled(changedList, new ComponentName(packageName, Settings.SMQQtiFeedbackActivity.class.getName()), mSMQ.isShowSmqSettings(), isAdmin) || somethingChanged;
+        }
+
         // Enable DataUsageSummaryActivity if the data plan feature flag is turned on otherwise
         // enable DataPlanUsageSummaryActivity.
         somethingChanged = setTileEnabled(changedList,
@@ -623,6 +657,11 @@ public class SettingsActivity extends SettingsBaseActivity
                         Settings.ConnectedDeviceDashboardActivity.class.getName()),
                 !UserManager.isDeviceInDemoMode(this) /* enabled */,
                 isAdmin) || somethingChanged;
+
+        somethingChanged = setTileEnabled(changedList, new ComponentName(packageName,
+                        Settings.SimSettingsActivity.class.getName()),
+                Utils.showSimCardTile(this), isAdmin)
+                || somethingChanged;
 
         somethingChanged = setTileEnabled(changedList, new ComponentName(packageName,
                         Settings.PowerUsageSummaryActivity.class.getName()),

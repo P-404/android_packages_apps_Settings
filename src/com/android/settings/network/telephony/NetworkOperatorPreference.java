@@ -19,6 +19,7 @@ package com.android.settings.network.telephony;
 import static android.telephony.SignalStrength.NUM_SIGNAL_STRENGTH_BINS;
 
 import android.content.Context;
+import android.telephony.AccessNetworkConstants.AccessNetworkType;
 import android.telephony.CellIdentity;
 import android.telephony.CellIdentityGsm;
 import android.telephony.CellIdentityLte;
@@ -39,6 +40,7 @@ import androidx.preference.Preference;
 
 import com.android.internal.telephony.OperatorInfo;
 import com.android.settings.R;
+import com.android.settings.Utils;
 
 import java.util.List;
 import java.util.Objects;
@@ -58,7 +60,7 @@ public class NetworkOperatorPreference extends Preference {
     private List<String> mForbiddenPlmns;
     private int mLevel = LEVEL_NONE;
     private boolean mShow4GForLTE;
-    private boolean mUseNewApi;
+    private boolean mIsAdvancedScanSupported;
 
     public NetworkOperatorPreference(Context context, CellInfo cellinfo,
             List<String> forbiddenPlmns, boolean show4GForLTE) {
@@ -77,8 +79,7 @@ public class NetworkOperatorPreference extends Preference {
         super(context);
         mForbiddenPlmns = forbiddenPlmns;
         mShow4GForLTE = show4GForLTE;
-        mUseNewApi = context.getResources().getBoolean(
-                com.android.internal.R.bool.config_enableNewAutoSelectNetworkUI);
+        mIsAdvancedScanSupported = Utils.isAdvancedPlmnScanSupported();
     }
 
     /**
@@ -180,7 +181,10 @@ public class NetworkOperatorPreference extends Preference {
     public OperatorInfo getOperatorInfo() {
         return new OperatorInfo(Objects.toString(mCellId.getOperatorAlphaLong(), ""),
                 Objects.toString(mCellId.getOperatorAlphaShort(), ""),
-                getOperatorNumeric());
+                getOperatorNumeric(),
+                // Send accessNetworkType as a parameter.
+                // This is converted to RadioAccessNetwork in the Telephony Framework.
+                getAccessNetworkType());
     }
 
     private int getIconIdForCell(CellInfo ci) {
@@ -226,11 +230,33 @@ public class NetworkOperatorPreference extends Preference {
     }
 
     private void updateIcon(int level) {
-        if (!mUseNewApi || level < 0 || level >= NUM_SIGNAL_STRENGTH_BINS) {
+        if (!mIsAdvancedScanSupported || level < 0 || level >= NUM_SIGNAL_STRENGTH_BINS) {
             return;
         }
         final Context context = getContext();
         setIcon(MobileNetworkUtils.getSignalStrengthIcon(context, level, NUM_SIGNAL_STRENGTH_BINS,
                 getIconIdForCell(mCellInfo), false));
+    }
+
+    public int getAccessNetworkType() {
+        int cellInfoType = mCellId == null ? CellInfo.TYPE_UNKNOWN : mCellId.getType();
+        int ant;
+        switch (cellInfoType) {
+            case CellInfo.TYPE_GSM:     ant = AccessNetworkType.GERAN;
+                                        break;
+            case CellInfo.TYPE_LTE:     ant = AccessNetworkType.EUTRAN;
+                                        break;
+            case CellInfo.TYPE_WCDMA:   // fallthrough
+            case CellInfo.TYPE_TDSCDMA: ant = AccessNetworkType.UTRAN;
+                                        break;
+            case CellInfo.TYPE_NR:      ant = AccessNetworkType.NGRAN;
+                                        break;
+            default:                    ant = AccessNetworkType.UNKNOWN;
+        }
+
+        Log.d(TAG, "AccessNetworkType: " + AccessNetworkType.toString(ant)
+                + " (" + ant + ")"
+                + ", mCellId: " + mCellId.toString());
+        return ant;
     }
 }

@@ -89,7 +89,7 @@ abstract class BluetoothNameDialogFragment extends InstrumentedDialogFragment
                 .setTitle(getDialogTitle())
                 .setView(createDialogView(deviceName))
                 .setPositiveButton(R.string.bluetooth_rename_button, (dialog, which) -> {
-                    setDeviceName(mDeviceNameView.getText().toString());
+                    setDeviceName(mDeviceNameView.getText().toString().trim());
                 })
                 .setNegativeButton(android.R.string.cancel, null);
         mAlertDialog = builder.create();
@@ -133,7 +133,11 @@ abstract class BluetoothNameDialogFragment extends InstrumentedDialogFragment
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_DONE) {
-            setDeviceName(v.getText().toString());
+            // Rejecting Empty String
+            if (v.length() != 0 && !(v.getText().toString().trim().isEmpty()))
+            {
+                setDeviceName(v.getText().toString());
+            }
             if (mAlertDialog != null && mAlertDialog.isShowing()) {
                 mAlertDialog.dismiss();
             }

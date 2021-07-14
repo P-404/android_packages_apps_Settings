@@ -345,6 +345,20 @@
         <item>5</item>
     </string-array>
 
+    <!-- Bluetooth broadcast pin: Titles for Pin configuration -->
+    <string-array translatable="false" name="bluetooth_broadcast_pin_config_titles">
+        <item>Unencrypted (no security)</item>
+        <item>4 digit pin (low security)</item>
+        <item>16 digit pin (high security)</item>
+    </string-array>
+
+    <!-- Bluetooth broadcast pin: Values for Pin configuration -->
+    <string-array translatable="false" name="bluetooth_broadcast_pin_config_values">
+        <item>0</item>
+        <item>4</item>
+        <item>16</item>
+    </string-array>
+
     <!-- Match this with drawable.wifi_signal. --> <skip />
     <!-- Wi-Fi settings. The signal strength a Wi-Fi network has. -->
     <string-array name="wifi_signal">
@@ -514,12 +528,25 @@
         <item>20</item>
     </string-array>
 
+    <string-array name="preferred_5g_network_mode_choices">
+        <item>NSA Mode</item>
+        <item>SA Mode</item>
+        <item>NSA + SA Mode</item>
+    </string-array>
+
+    <string-array name="preferred_5g_network_mode_values" translatable="false">
+        <item>"1"</item>
+        <item>"2"</item>
+        <item>"0"</item>
+    </string-array>
+
     <!-- MVNO Info used in APN editor -->
     <string-array name="mvno_type_entries">
         <item>None</item>
         <item translatable="false">SPN</item>
         <item translatable="false">IMSI</item>
         <item translatable="false">GID</item>
+        <item translatable="false">ICCID</item>
     </string-array>
 
     <string-array translatable="false" name="mvno_type_values">
@@ -531,6 +558,8 @@
         <item>imsi</item>
         <!-- Do not translate. -->
         <item>gid</item>
+        <!-- Do not translate. -->
+        <item>iccid</item>
     </string-array>
 
     <!-- Apps on SD installation location options in ApplicationSettings -->
@@ -1352,7 +1381,7 @@
         <item>CDMA/EvDo/GSM/WCDMA</item>
         <item>CDMA + LTE/EvDo</item>
         <item>GSM/WCDMA/LTE</item>
-        <item>Global</item>
+        <item>LTE/CDMA/EvDo/GSM/WCDMA</item>
         <item>LTE</item>
         <item>LTE / WCDMA</item>
         <item>TDSCDMA only</item>
@@ -1369,7 +1398,7 @@
         <item>NR/LTE</item>
         <item>NR/LTE/CDMA/EvDo</item>
         <item>NR/LTE/GSM/WCDMA</item>
-        <item>NR/LTE/CDMA/EvDo/GSM/WCDMA</item>
+        <item>Global</item>
         <item>NR/LTE/WCDMA</item>
         <item>NR/LTE/TDSCDMA</item>
         <item>NR/LTE/TDSCDMA/GSM</item>
@@ -1428,6 +1457,39 @@
     </string-array>
 
 
+    <!-- String arrays for PrimaryCard LW feature -->
+    <string-array name="preferred_network_mode_gsm_wcdma_choices">
+        <item>GSM only</item>
+        <item>WCDMA only</item>
+        <item>GSM/WCDMA preferred</item>
+    </string-array>
+    <string-array name="preferred_network_mode_gsm_wcdma_values" translatable="false">
+        <item>"1"</item>
+        <item>"2"</item>
+        <item>"0"</item>
+    </string-array>
+
+    <string-array name="enabled_networks_gsm_wcdma_choices">
+        <item>@string/network_2G_only</item>
+        <item>@string/network_3G_only</item>
+        <item>@string/network_2G_3G_preferred</item>
+    </string-array>
+    <string-array name="enabled_networks_gsm_wcdma_values" translatable="false">
+        <item>"1"</item>
+        <item>"2"</item>
+        <item>"0"</item>
+    </string-array>
+
+    <!-- String arrays for Subsidy Lock feature -->
+    <string-array name="enabled_networks_subsidy_locked_choices">
+        <item>LTE Only</item>
+        <item>GSM/WCDMA/LTE</item>
+    </string-array>
+    <string-array name="enabled_networks_subsidy_locked_values" translatable="false">
+        <item>"11"</item>
+        <item>"9"</item>
+    </string-array>
+
     <!-- WiFi calling mode array -->
     <string-array name="wifi_calling_mode_summaries" translatable="false">
         <item>@string/wifi_calling_mode_wifi_preferred_summary</item>
@@ -1435,10 +1497,25 @@
         <item>@string/wifi_calling_mode_wifi_only_summary</item>
     </string-array>
 
+    <!-- WiFi calling mode array with ims preferred -->
+    <string-array name="wifi_calling_mode_summaries_with_ims_preferred" translatable="false">
+         <item>@string/wifi_calling_mode_ims_preferred_summary</item>
+         <item>@string/wifi_calling_mode_wifi_preferred_summary</item>
+         <item>@string/wifi_calling_mode_cellular_preferred_summary</item>
+         <item>@string/wifi_calling_mode_wifi_only_summary</item>
+    </string-array>
+
     <!-- WiFi calling mode array without wifi only mode -->
     <string-array name="wifi_calling_mode_summaries_without_wifi_only" translatable="false">
         <item>@string/wifi_calling_mode_wifi_preferred_summary</item>
         <item>@string/wifi_calling_mode_cellular_preferred_summary</item>
+    </string-array>
+
+    <!-- WiFi calling mode array without wifi only mode with ims preferred -->
+    <string-array name="wifi_calling_mode_summaries_without_wifi_only_with_ims_preferred" translatable="false">
+         <item>@string/wifi_calling_mode_ims_preferred_summary</item>
+         <item>@string/wifi_calling_mode_wifi_preferred_summary</item>
+         <item>@string/wifi_calling_mode_cellular_preferred_summary</item>
     </string-array>
 
     <!-- Carrier variant of Enhaced 4G LTE Mode title.  [CHAR LIMIT=NONE] -->
@@ -1501,4 +1578,31 @@
         <item>@string/rtt_settings_always_visible</item>
     </string-array>
 
+    <!--String arrays for showing user PLMN list -->
+    <string-array name="uplmn_prefer_network_mode_td_choices">
+        <item>GSM</item>
+        <item>TDSCDMA</item>
+        <item>LTE</item>
+        <item>Triple mode</item>
+    </string-array>
+
+    <string-array name="uplmn_prefer_network_mode_w_choices">
+        <item>GSM</item>
+        <item>WCDMA</item>
+        <item>LTE</item>
+        <item>Triple mode</item>
+    </string-array>
+
+    <string-array name="uplmn_prefer_network_mode_values">
+        <item>"0"</item>
+        <item>"1"</item>
+        <item>"2"</item>
+        <item>"3"</item>
+    </string-array>
+
+    <string-array name="uplmn_cu_mcc_mnc_values">
+        <item>"46001"</item>
+        <item>"46006"</item>
+        <item>"46009"</item>
+    </string-array>
 </resources>

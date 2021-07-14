@@ -37,6 +37,7 @@ public class Settings extends SettingsActivity {
     public static class CreateShortcutActivity extends SettingsActivity { /* empty */ }
     public static class FaceSettingsActivity extends SettingsActivity { /* empty */ }
     public static class FingerprintSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class SimSettingsActivity extends SettingsActivity { /* empty */ }
     public static class TetherSettingsActivity extends SettingsActivity {
         // TODO(b/147675042): Clean the override up when we enable the new Fragment persistently.
         @Override
@@ -234,6 +235,8 @@ public class Settings extends SettingsActivity {
     public static class StorageDashboardActivity extends SettingsActivity {}
     public static class AccountDashboardActivity extends SettingsActivity {}
     public static class SystemDashboardActivity extends SettingsActivity {}
+    public static class SupportDashboardActivity extends SettingsActivity {}
+    public static class SMQQtiFeedbackActivity extends SettingsActivity { /* empty */ }
 
     /**
      * Activity for MediaControlsSettings

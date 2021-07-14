@@ -28,6 +28,10 @@ import android.telephony.AccessNetworkConstants;
 import android.telephony.CarrierConfigManager;
 import android.telephony.CellIdentity;
 import android.telephony.CellInfo;
+import android.telephony.CellInfoCdma;
+import android.telephony.CellInfoGsm;
+import android.telephony.CellInfoLte;
+import android.telephony.CellInfoWcdma;
 import android.telephony.NetworkRegistrationInfo;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
@@ -42,6 +46,7 @@ import androidx.preference.PreferenceCategory;
 
 import com.android.internal.telephony.OperatorInfo;
 import com.android.settings.R;
+import com.android.settings.Utils;
 import com.android.settings.dashboard.DashboardFragment;
 import com.android.settings.overlay.FeatureFactory;
 import com.android.settingslib.core.instrumentation.MetricsFeatureProvider;
@@ -50,6 +55,8 @@ import com.android.settingslib.utils.ThreadUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -84,6 +91,7 @@ public class NetworkSelectSettings extends DashboardFragment {
     private final ExecutorService mNetworkScanExecutor = Executors.newFixedThreadPool(1);
     private MetricsFeatureProvider mMetricsFeatureProvider;
     private boolean mUseNewApi;
+    private boolean mIsAdvancedScanSupported;
     private long mRequestIdManualNetworkSelect;
     private long mRequestIdManualNetworkScan;
     private long mWaitingForNumberOfScanResults;
@@ -94,8 +102,8 @@ public class NetworkSelectSettings extends DashboardFragment {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
 
-        mUseNewApi = getContext().getResources().getBoolean(
-                com.android.internal.R.bool.config_enableNewAutoSelectNetworkUI);
+        mIsAdvancedScanSupported = Utils.isAdvancedPlmnScanSupported();
+        Log.d(TAG, "mIsAdvancedScanSupported: " + mIsAdvancedScanSupported);
         mSubId = getArguments().getInt(Settings.EXTRA_SUB_ID);
 
         mPreferenceCategory = findPreference(PREF_KEY_NETWORK_OPERATORS);
@@ -105,7 +113,7 @@ public class NetworkSelectSettings extends DashboardFragment {
         mTelephonyManager = getContext().getSystemService(TelephonyManager.class)
                 .createForSubscriptionId(mSubId);
         mNetworkScanHelper = new NetworkScanHelper(
-                mTelephonyManager, mCallback, mNetworkScanExecutor);
+                getContext(), mTelephonyManager, mCallback, mNetworkScanExecutor);
         PersistableBundle bundle = ((CarrierConfigManager) getContext().getSystemService(
                 Context.CARRIER_CONFIG_SERVICE)).getConfigForSubId(mSubId);
         if (bundle != null) {
@@ -127,11 +135,11 @@ public class NetworkSelectSettings extends DashboardFragment {
                     .findViewById(R.id.progress_bar_animation);
             setProgressBarVisible(false);
         }
-        forceUpdateConnectedPreferenceCategory();
     }
 
     @Override
     public void onStart() {
+        Log.d(TAG, "onStart()");
         super.onStart();
 
         updateForbiddenPlmns();
@@ -139,6 +147,8 @@ public class NetworkSelectSettings extends DashboardFragment {
             return;
         }
         if (mWaitingForNumberOfScanResults <= 0) {
+            // Clear the selected preference whenever the scan starts
+            mSelectedPreference = null;
             startNetworkQuery();
         }
     }
@@ -156,6 +166,7 @@ public class NetworkSelectSettings extends DashboardFragment {
 
     @Override
     public void onStop() {
+        Log.d(TAG, "onStop() mWaitingForNumberOfScanResults: " + mWaitingForNumberOfScanResults);
         super.onStop();
         if (mWaitingForNumberOfScanResults <= 0) {
             stopNetworkQuery();
@@ -217,16 +228,19 @@ public class NetworkSelectSettings extends DashboardFragment {
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+            Log.d(TAG, "handleMessage, msg.what: " + msg.what);
             switch (msg.what) {
                 case EVENT_SET_NETWORK_SELECTION_MANUALLY_DONE:
                     final boolean isSucceed = (boolean) msg.obj;
-                    stopNetworkQuery();
                     setProgressBarVisible(false);
                     getPreferenceScreen().setEnabled(true);
-
-                    mSelectedPreference.setSummary(isSucceed
-                            ? R.string.network_connected
-                            : R.string.network_could_not_connect);
+                    if (mSelectedPreference != null) {
+                        mSelectedPreference.setSummary(isSucceed
+                                ? R.string.network_connected
+                                : R.string.network_could_not_connect);
+                    } else {
+                        Log.d(TAG, "No preference to update!");
+                    }
                     break;
                 case EVENT_NETWORK_SCAN_RESULTS:
                     final List<CellInfo> results = (List<CellInfo>) msg.obj;
@@ -241,6 +255,7 @@ public class NetworkSelectSettings extends DashboardFragment {
                     }
 
                     mCellInfoList = new ArrayList<>(results);
+                    Log.d(TAG, "CellInfoList size: " +  mCellInfoList.size());
                     Log.d(TAG, "CellInfoList: " + CellInfoUtil.cellInfoListToString(mCellInfoList));
                     if (mCellInfoList != null && mCellInfoList.size() != 0) {
                         final NetworkOperatorPreference connectedPref =
@@ -410,19 +425,30 @@ public class NetworkSelectSettings extends DashboardFragment {
             if (networkList == null || networkList.size() == 0) {
                 return;
             }
+
+            Set<CellIdentity> cellIdentitySet = new HashSet<CellIdentity>();
             for (NetworkRegistrationInfo regInfo : networkList) {
+                Log.d(TAG, "regInfo: " + regInfo.toString());
+                // There can be multiple NetworkRegistrationInfos for the same CellIdentity,
+                // e.g., one each for CS and PS. In such cases, show show only one entry,
+                // otherwise it would be quite confusing to the user to see multiple entries for
+                // the same CellIdentity instance.
                 final CellIdentity cellIdentity = regInfo.getCellIdentity();
                 if (cellIdentity != null) {
-                    final NetworkOperatorPreference pref = new NetworkOperatorPreference(
-                            getPrefContext(), cellIdentity, mForbiddenPlmns, mShow4GForLTE);
-                    pref.setSummary(R.string.network_connected);
-                    // Update the signal strength icon, since the default signalStrength value
-                    // would be zero
-                    // (it would be quite confusing why the connected network has no signal)
-                    pref.setIcon(SignalStrength.NUM_SIGNAL_STRENGTH_BINS - 1);
-                    mPreferenceCategory.addPreference(pref);
-                    break;
+                    // Add each valid CellIdentity to a HashSet so that only unique values remain.
+                    cellIdentitySet.add(cellIdentity);
                 }
+            }
+
+            for (CellIdentity cellIdentity : cellIdentitySet) {
+                final NetworkOperatorPreference pref = new NetworkOperatorPreference(
+                        getPrefContext(), cellIdentity, mForbiddenPlmns, mShow4GForLTE);
+                pref.setSummary(R.string.network_connected);
+                // Update the signal strength icon, since the default signalStrength value
+                // would be zero
+                // (it would be quite confusing why the connected network has no signal)
+                pref.setIcon(SignalStrength.NUM_SIGNAL_STRENGTH_BINS - 1);
+                mPreferenceCategory.addPreference(pref);
             }
         }
     }
@@ -470,10 +496,11 @@ public class NetworkSelectSettings extends DashboardFragment {
         if (mNetworkScanHelper != null) {
             mRequestIdManualNetworkScan = getNewRequestId();
             mWaitingForNumberOfScanResults = MIN_NUMBER_OF_SCAN_REQUIRED;
+
             mNetworkScanHelper.startNetworkScan(
-                    mUseNewApi
+                    mIsAdvancedScanSupported
                             ? NetworkScanHelper.NETWORK_SCAN_TYPE_INCREMENTAL_RESULTS
-                            : NetworkScanHelper.NETWORK_SCAN_TYPE_WAIT_FOR_ALL_RESULTS);
+                            : NetworkScanHelper.NETWORK_SCAN_TYPE_INCREMENTAL_RESULTS_LEGACY);
         }
     }
 
@@ -487,6 +514,7 @@ public class NetworkSelectSettings extends DashboardFragment {
 
     @Override
     public void onDestroy() {
+        Log.d(TAG, "onDestroy()");
         stopNetworkQuery();
         mNetworkScanExecutor.shutdown();
         super.onDestroy();

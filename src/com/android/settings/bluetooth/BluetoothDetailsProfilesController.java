@@ -16,6 +16,7 @@
 
 package com.android.settings.bluetooth;
 
+import android.bluetooth.BluetoothCodecStatus;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
@@ -28,8 +29,11 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceScreen;
 import androidx.preference.SwitchPreference;
 
+import com.android.settings.bluetooth.GroupBluetoothProfileSwitchConfirmDialog.BluetoothProfileConfirmListener;
+
 import com.android.settings.R;
 import com.android.settingslib.bluetooth.A2dpProfile;
+import com.android.settingslib.bluetooth.BluetoothCallback;
 import com.android.settingslib.bluetooth.CachedBluetoothDevice;
 import com.android.settingslib.bluetooth.LocalBluetoothManager;
 import com.android.settingslib.bluetooth.LocalBluetoothProfile;
@@ -40,14 +44,14 @@ import com.android.settingslib.bluetooth.PbapServerProfile;
 import com.android.settingslib.core.lifecycle.Lifecycle;
 
 import java.util.List;
-
 /**
  * This class adds switches for toggling the individual profiles that a Bluetooth device
  * supports, such as "Phone audio", "Media audio", "Contact sharing", etc.
  */
 public class BluetoothDetailsProfilesController extends BluetoothDetailsController
         implements Preference.OnPreferenceClickListener,
-        LocalBluetoothProfileManager.ServiceListener {
+        LocalBluetoothProfileManager.ServiceListener, BluetoothCallback,
+        BluetoothProfileConfirmListener {
     private static final String KEY_PROFILES_GROUP = "bluetooth_profiles";
     private static final String KEY_BOTTOM_PREFERENCE = "bottom_preference";
     private static final int ORDINAL = 99;
@@ -62,6 +66,14 @@ public class BluetoothDetailsProfilesController extends BluetoothDetailsControll
     @VisibleForTesting
     PreferenceCategory mProfilesContainer;
 
+    private PreferenceFragmentCompat mFragment;
+    private boolean mIsGroupDevice = false;
+    private GroupBluetoothProfileSwitchConfirmDialog mGroupBluetoothProfileConfirm;
+    private int mGroupId = -1;
+    private GroupUtils mGroupUtils;
+    private LocalBluetoothProfile mProfile;
+    private SwitchPreference mProfilePref;
+
     public BluetoothDetailsProfilesController(Context context, PreferenceFragmentCompat fragment,
             LocalBluetoothManager manager, CachedBluetoothDevice device, Lifecycle lifecycle) {
         super(context, fragment, device, lifecycle);
@@ -69,6 +81,12 @@ public class BluetoothDetailsProfilesController extends BluetoothDetailsControll
         mProfileManager = mManager.getProfileManager();
         mCachedDevice = device;
         lifecycle.addObserver(this);
+        mFragment = fragment;
+        mGroupUtils = new GroupUtils(context);
+        mIsGroupDevice = mGroupUtils.isGroupDevice(mCachedDevice);
+        if (mIsGroupDevice) {
+            mGroupId = mGroupUtils.getGroupId(mCachedDevice);
+        }
     }
 
     @Override
@@ -170,23 +188,22 @@ public class BluetoothDetailsProfilesController extends BluetoothDetailsControll
      */
     @Override
     public boolean onPreferenceClick(Preference preference) {
-        LocalBluetoothProfile profile = mProfileManager.getProfileByName(preference.getKey());
-        if (profile == null) {
+        mProfile = mProfileManager.getProfileByName(preference.getKey());
+        if (mProfile == null) {
             // It might be the PbapServerProfile, which is not stored by name.
             PbapServerProfile psp = mManager.getProfileManager().getPbapProfile();
             if (TextUtils.equals(preference.getKey(), psp.toString())) {
-                profile = psp;
+                mProfile = psp;
             } else {
                 return false;
             }
         }
-        SwitchPreference profilePref = (SwitchPreference) preference;
-        if (profilePref.isChecked()) {
-            enableProfile(profile);
+        mProfilePref = (SwitchPreference) preference;
+        if (mIsGroupDevice) {
+            showProfileConfirmDialog();
         } else {
-            disableProfile(profile);
+            enableOrDisableProfile();
         }
-        refreshProfilePreference(profilePref, profile);
         return true;
     }
 
@@ -245,12 +262,14 @@ public class BluetoothDetailsProfilesController extends BluetoothDetailsControll
     public void onPause() {
         super.onPause();
         mProfileManager.removeServiceListener(this);
+        mManager.getEventManager().unregisterCallback(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         mProfileManager.addServiceListener(this);
+        mManager.getEventManager().registerCallback(this);
     }
 
     @Override
@@ -261,6 +280,40 @@ public class BluetoothDetailsProfilesController extends BluetoothDetailsControll
     @Override
     public void onServiceDisconnected() {
         refresh();
+    }
+
+    private void updateA2dpHighQualityAudioPref() {
+        A2dpProfile a2dp = null;
+        for (LocalBluetoothProfile profile : getProfiles()) {
+            if (profile instanceof A2dpProfile) {
+                if (profile.isProfileReady()) {
+                    a2dp = (A2dpProfile)profile;
+                }
+                break;
+            }
+        }
+        if (a2dp == null) {
+            return;
+        }
+
+        BluetoothDevice device = mCachedDevice.getDevice();
+        SwitchPreference highQualityPref = (SwitchPreference) mProfilesContainer.findPreference(
+                HIGH_QUALITY_AUDIO_PREF_TAG);
+        if (highQualityPref != null) {
+            if (a2dp.isEnabled(device) && a2dp.supportsHighQualityAudio(device)) {
+                highQualityPref.setTitle(a2dp.getHighQualityAudioOptionLabel(device));
+                highQualityPref.setChecked(a2dp.isHighQualityAudioEnabled(device));
+            }
+        }
+    }
+
+    @Override
+    public void onA2dpCodecConfigChanged(CachedBluetoothDevice cachedDevice,
+            BluetoothCodecStatus codecStatus) {
+        if (!cachedDevice.equals(mCachedDevice)) {
+            return;
+        }
+        updateA2dpHighQualityAudioPref();
     }
 
     /**
@@ -304,5 +357,48 @@ public class BluetoothDetailsProfilesController extends BluetoothDetailsControll
     @Override
     public String getPreferenceKey() {
         return KEY_PROFILES_GROUP;
+    }
+
+    private void initGroupBluetoothProfileConfirm() {
+        if (mIsGroupDevice) {
+            if (mGroupBluetoothProfileConfirm != null) {
+                mGroupBluetoothProfileConfirm.dismiss();
+                mGroupBluetoothProfileConfirm = null;
+            }
+            mGroupBluetoothProfileConfirm =
+                    GroupBluetoothProfileSwitchConfirmDialog.newInstance(mGroupId);
+            mGroupBluetoothProfileConfirm.setPairingController(this);
+        }
+    }
+
+    @Override
+    public void onDialogNegativeClick() {
+        resetProfileSwitch();
+        mGroupBluetoothProfileConfirm.dismiss();
+    }
+
+    @Override
+    public void onDialogPositiveClick() {
+        enableOrDisableProfile();
+        mGroupBluetoothProfileConfirm.dismiss();
+    }
+
+    private void showProfileConfirmDialog() {
+        initGroupBluetoothProfileConfirm();
+        mGroupBluetoothProfileConfirm.show(mFragment.getFragmentManager(),
+                GroupBluetoothProfileSwitchConfirmDialog.TAG);
+    }
+
+    private void resetProfileSwitch() {
+        mProfilePref.setChecked(!mProfilePref.isChecked());
+    }
+
+    private void enableOrDisableProfile() {
+        if (mProfilePref.isChecked()) {
+            enableProfile(mProfile);
+        } else {
+            disableProfile(mProfile);
+        }
+        refreshProfilePreference(mProfilePref, mProfile);
     }
 }

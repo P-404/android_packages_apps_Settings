@@ -19,6 +19,8 @@ package com.android.settings.wifi;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.OnLifecycleEvent;
 import androidx.preference.PreferenceGroup;
 import androidx.preference.PreferenceScreen;
 
@@ -38,7 +40,7 @@ import com.android.settingslib.wifi.WifiTrackerFactory;
  * controller class when there is a wifi connection present.
  */
 public class WifiConnectionPreferenceController extends AbstractPreferenceController implements
-        WifiTracker.WifiListener {
+        WifiTracker.WifiListener, LifecycleObserver {
 
     private static final String TAG = "WifiConnPrefCtrl";
 

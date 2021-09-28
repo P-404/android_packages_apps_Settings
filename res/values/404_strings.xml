@@ -160,7 +160,7 @@
 
     <!-- Signature spoofing -->
     <string name="signature_spoofing_title">Allow signature spoofing</string>
-    <string name="signature_spoofing_summary">Enables signature spoofing for micorG</string>
+    <string name="signature_spoofing_summary">Enables signature spoofing for microG</string>
 
     <!-- Custom seekbar -->
     <string name="custom_seekbar_value">Value: <xliff:g id="v">%s</xliff:g></string>

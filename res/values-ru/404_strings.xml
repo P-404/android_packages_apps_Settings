@@ -176,7 +176,7 @@
 
     <!-- Signature spoofing -->
     <string name="signature_spoofing_title">Разрешить подделку подписи</string>
-    <string name="signature_spoofing_summary">Включает подмену подписи для micorG</string>
+    <string name="signature_spoofing_summary">Включает подмену подписи для microG</string>
 
     <!-- Custom seekbar -->
     <string name="custom_seekbar_value">Значение: <xliff:g id="v">%s</xliff:g></string>

@@ -52,4 +52,10 @@
     <string name="ok">OK</string>
     <string name="edit_hint">Value</string>
     <string name="seek_value_edit_label">Set value</string>
+
+    <!-- Lockscreen media artwork -->
+    <string name="lockscreen_media_art_category_title">Media art</string>
+    <string name="lockscreen_media_blur_title">Media art blur level</string>
+    <string name="show_lockscreen_media_art_title">Show media art</string>
+    <string name="lockscreen_media_art_options_title">Lockscreen media art</string>
 </resources>

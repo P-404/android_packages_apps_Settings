@@ -103,4 +103,10 @@
     <!-- Hotspot Extras -->
     <string name="tethering_allow_vpn_upstreams_title">Allow clients to use VPNs</string>
     <string name="tethering_allow_vpn_upstreams_summary">Permit hotspot clients to use this device\u2019s VPN connections for upstream connectivity</string>
+
+    <!-- Lockscreen media artwork -->
+    <string name="lockscreen_media_art_category_title">Media art</string>
+    <string name="lockscreen_media_blur_title">Media art blur level</string>
+    <string name="show_lockscreen_media_art_title">Show media art</string>
+    <string name="lockscreen_media_art_options_title">Lockscreen media art</string>
 </resources>

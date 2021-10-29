@@ -17,4 +17,7 @@
     <!-- Project 404 version -->
     <string name="p404_version_title">Project 404 version</string>
 
+    <!-- CAF tag version in About phone -->
+    <string name="caf_revision_tag">CAF revision</string>
+
 </resources>

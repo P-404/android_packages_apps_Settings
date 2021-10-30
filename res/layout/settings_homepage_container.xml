@@ -65,19 +65,9 @@
             android:orientation="vertical"
             app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed">
 
-            <ImageView
-                android:id="@+id/account_avatar"
-                android:layout_width="@dimen/avatar_length"
-                android:layout_height="@dimen/avatar_length"
-                android:layout_marginTop="@dimen/avatar_margin_top"
-                android:layout_marginEnd="@dimen/avatar_margin_end"
-                android:layout_gravity="end"
-                android:visibility="invisible"
-                android:accessibilityTraversalAfter="@id/homepage_title"
-                android:contentDescription="@string/search_bar_account_avatar_content_description"/>
-
             <TextView
                 android:id="@+id/homepage_title"
+                android:layout_marginTop="@dimen/avatar_margin_top"
                 android:text="@string/settings_label"
                 style="@style/HomepageTitleText"/>
 

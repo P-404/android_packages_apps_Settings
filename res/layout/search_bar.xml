@@ -24,7 +24,8 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/search_bar"
         style="@style/SearchBarStyle"
-        android:layout_width="0dp"
+        android:layout_width="200dp"
+        android:layout_marginEnd="28dp"
         android:layout_height="wrap_content"
         android:layout_weight="1">
         <Toolbar
@@ -46,5 +47,12 @@
         </Toolbar>
     </com.google.android.material.card.MaterialCardView>
 
+   <ImageView
+        android:id="@+id/account_avatar"
+        android:layout_width="@dimen/avatar_length"
+        android:layout_height="@dimen/avatar_length"
+        android:layout_gravity="center_vertical"
+        android:accessibilityTraversalAfter="@id/homepage_title"
+        android:contentDescription="@string/search_bar_account_avatar_content_description"/>
 </LinearLayout>
 

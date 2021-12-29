@@ -209,4 +209,14 @@
 
     <!-- Background for multiple user settings page avatars -->
     <color name="user_avatar_color_bg">?androidprv:attr/colorSurface</color>
+
+    <!-- font pack and font customization -->
+    <color name="config_tab_color">@*android:color/background_floating_device_default_dark</color>
+    <color name="config_tab_text_color">@*android:color/secondary_text_default_material_dark</color>
+
+    <color name="theme_accent">@*android:color/accent_device_default_dark</color>
+
+    <color name="homepage_crdroid_background">#00bcd4</color>
+
+    <color name="option_border_default">#5f6368</color>
 </resources>

@@ -22,6 +22,7 @@ import android.content.Context
 import android.database.ContentObserver
 import android.hardware.display.DisplayManager
 import android.os.Handler
+import android.os.UserHandle
 import android.provider.DeviceConfig
 import android.provider.Settings
 import android.util.Log
@@ -34,8 +35,8 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceScreen
 
-import com.android.settings.core.BasePreferenceController
 import com.android.settings.R
+import com.android.settings.core.BasePreferenceController
 import com.android.settingslib.core.lifecycle.Lifecycle
 
 class MaxRefreshRatePreferenceController(
@@ -56,24 +57,33 @@ class MaxRefreshRatePreferenceController(
     private var listPreference: ListPreference? = null
 
     private var defaultPeakRefreshRate = getDefaultPeakRefreshRate()
-    private val values = mutableListOf<Float>()
+    private val values: List<Float>
 
     init {
         val display: Display? = context.getSystemService(
-            DisplayManager::class.java).getDisplay(Display.DEFAULT_DISPLAY)
+            DisplayManager::class.java
+        ).getDisplay(Display.DEFAULT_DISPLAY)
+
+        val tmpValues = mutableListOf<Float>()
         if (display == null) {
             Log.e(TAG, "No valid default display device")
         } else {
             val mode = display.mode
             display.supportedModes.forEach {
                 if (it.physicalWidth == mode.physicalWidth &&
-                        it.physicalHeight == mode.physicalHeight) {
+                        it.physicalHeight == mode.physicalHeight
+                ) {
                     val refreshRate = refreshRateRegex.find(
-                        it.refreshRate.toString())?.value ?: return@forEach
-                    values.add(refreshRate.toFloat())
+                        it.refreshRate.toString()
+                    )?.value?.toFloat() ?: return@forEach
+                    if (!tmpValues.contains(refreshRate)) {
+                        tmpValues.add(refreshRate)
+                    }
                 }
             }
         }
+        values = tmpValues.sorted()
+
         lifecycle?.addObserver(this)
     }
 
@@ -85,7 +95,8 @@ class MaxRefreshRatePreferenceController(
         )
         return if (peakRefreshRate == INVALID_REFRESH_RATE) {
             mContext.resources.getInteger(
-                com.android.internal.R.integer.config_defaultPeakRefreshRate).toFloat()
+                com.android.internal.R.integer.config_defaultPeakRefreshRate
+            ).toFloat()
         } else {
             peakRefreshRate
         }
@@ -93,31 +104,34 @@ class MaxRefreshRatePreferenceController(
 
     override fun displayPreference(screen: PreferenceScreen) {
         super.displayPreference(screen)
-        listPreference = screen.findPreference<ListPreference>(KEY)
+        listPreference = screen.findPreference(KEY)
     }
 
     override fun getAvailabilityStatus(): Int =
         if (mContext.resources.getBoolean(R.bool.config_show_refresh_rate_switch)
-                && values.size > 1) {
+                && values.size > 1
+        ) {
             AVAILABLE
         } else {
             UNSUPPORTED_ON_DEVICE
         }
 
     override fun updateState(preference: Preference) {
-        val currentValue = Settings.System.getFloat(
+        val currentValue = Settings.System.getFloatForUser(
             mContext.contentResolver,
             Settings.System.PEAK_REFRESH_RATE,
             defaultPeakRefreshRate,
+            UserHandle.USER_CURRENT
         )
         updateStateInternal(currentValue)
     }
 
     private fun updateStateInternal(currentValue: Float) {
-        val minRate = Settings.System.getFloat(
+        val minRate = Settings.System.getFloatForUser(
             mContext.contentResolver,
             Settings.System.MIN_REFRESH_RATE,
             DEFAULT_REFRESH_RATE,
+            UserHandle.USER_CURRENT
         )
         listPreference?.let { preference ->
             preference.setEnabled(minRate <= currentValue)
@@ -143,7 +157,9 @@ class MaxRefreshRatePreferenceController(
             // Show actual value as summary irrespective of whether it is
             // present in entries or not.
             preference.summary = mContext.getString(
-                R.string.refresh_rate_placeholder, refreshRate)
+                R.string.refresh_rate_placeholder,
+                refreshRate
+            )
         }
     }
 
@@ -155,11 +171,13 @@ class MaxRefreshRatePreferenceController(
                     Settings.System.getUriFor(Settings.System.MIN_REFRESH_RATE),
                     false,
                     settingsObserver,
+                    UserHandle.USER_CURRENT
                 )
                 registerContentObserver(
                     Settings.System.getUriFor(Settings.System.PEAK_REFRESH_RATE),
                     false,
                     settingsObserver,
+                    UserHandle.USER_CURRENT
                 )
             }
         } else if (event == Event.ON_STOP) {
@@ -170,10 +188,11 @@ class MaxRefreshRatePreferenceController(
 
     override fun onPreferenceChange(preference: Preference, newValue: Any): Boolean {
         // ContentObserver will update the preference
-        return Settings.System.putFloat(
+        return Settings.System.putFloatForUser(
             mContext.contentResolver,
             Settings.System.PEAK_REFRESH_RATE,
             (newValue as String).toFloat(),
+            UserHandle.USER_CURRENT
         )
     }
 

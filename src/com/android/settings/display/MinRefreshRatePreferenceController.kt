@@ -21,6 +21,7 @@ import android.content.Context
 import android.database.ContentObserver
 import android.hardware.display.DisplayManager
 import android.os.Handler
+import android.os.UserHandle
 import android.provider.Settings
 import android.util.Log
 import android.view.Display
@@ -32,8 +33,8 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceScreen
 
-import com.android.settings.core.BasePreferenceController
 import com.android.settings.R
+import com.android.settings.core.BasePreferenceController
 import com.android.settingslib.core.lifecycle.Lifecycle
 
 class MinRefreshRatePreferenceController(
@@ -52,50 +53,64 @@ class MinRefreshRatePreferenceController(
 
     private var listPreference: ListPreference? = null
 
-    private val entries = mutableListOf<String>()
-    private val values = mutableListOf<String>()
+    private val entries: Array<String>
+    private val values: Array<String>
 
     init {
         val display: Display? = context.getSystemService(
-            DisplayManager::class.java).getDisplay(Display.DEFAULT_DISPLAY)
+            DisplayManager::class.java
+        ).getDisplay(Display.DEFAULT_DISPLAY)
+
+        val tmpValues = mutableListOf<Int>()
         if (display == null) {
             Log.e(TAG, "No valid default display device")
         } else {
             val mode = display.mode
             display.supportedModes.forEach {
                 if (it.physicalWidth == mode.physicalWidth &&
-                        it.physicalHeight == mode.physicalHeight) {
+                        it.physicalHeight == mode.physicalHeight
+                ) {
                     val refreshRate = refreshRateRegex.find(
-                        it.refreshRate.toString())?.value ?: return@forEach
-                    entries.add(context.getString(R.string.refresh_rate_placeholder, refreshRate))
-                    values.add(refreshRate)
+                        it.refreshRate.toString()
+                    )?.value?.toInt() ?: return@forEach
+                    if (!tmpValues.contains(refreshRate)) {
+                        tmpValues.add(refreshRate)
+                    }
                 }
             }
         }
+        val sortedList = tmpValues.sorted()
+        entries = sortedList.map {
+            context.getString(R.string.refresh_rate_placeholder, it)
+        }.toTypedArray()
+        values = sortedList.map { it.toString() }.toTypedArray()
+
         lifecycle?.addObserver(this)
     }
 
     override fun displayPreference(screen: PreferenceScreen) {
         super.displayPreference(screen)
         listPreference = screen.findPreference<ListPreference>(KEY)?.also {
-            it.entries = entries.toTypedArray()
-            it.entryValues = values.toTypedArray()
+            it.entries = entries
+            it.entryValues = values
         }
     }
 
     override fun getAvailabilityStatus(): Int =
         if (mContext.resources.getBoolean(R.bool.config_show_refresh_rate_switch)
-                && entries.size > 1) {
+                && entries.size > 1
+        ) {
             AVAILABLE
         } else {
             UNSUPPORTED_ON_DEVICE
         }
 
     override fun updateState(preference: Preference) {
-        val currentValue = Settings.System.getFloat(
+        val currentValue = Settings.System.getFloatForUser(
             mContext.contentResolver,
             Settings.System.MIN_REFRESH_RATE,
             DEFAULT_REFRESH_RATE,
+            UserHandle.USER_CURRENT
         )
         updateStateInternal(
             if (currentValue == NO_CONFIG)
@@ -125,6 +140,7 @@ class MinRefreshRatePreferenceController(
                 Settings.System.getUriFor(Settings.System.MIN_REFRESH_RATE),
                 false,
                 settingsObserver,
+                UserHandle.USER_CURRENT
             )
         } else if (event == Event.ON_STOP) {
             mContext.contentResolver.unregisterContentObserver(settingsObserver)
@@ -133,10 +149,11 @@ class MinRefreshRatePreferenceController(
 
     override fun onPreferenceChange(preference: Preference, newValue: Any): Boolean {
         val refreshRate = (newValue as String).toFloat()
-        val changed = Settings.System.putFloat(
+        val changed = Settings.System.putFloatForUser(
             mContext.contentResolver,
             Settings.System.MIN_REFRESH_RATE,
             refreshRate,
+            UserHandle.USER_CURRENT
         )
         if (changed) {
             updateStateInternal(refreshRate)

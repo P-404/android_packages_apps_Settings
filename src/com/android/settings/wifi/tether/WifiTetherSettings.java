@@ -48,6 +48,8 @@ import com.android.settingslib.core.AbstractPreferenceController;
 import com.android.settingslib.search.SearchIndexable;
 import com.android.settingslib.wifi.WifiEnterpriseRestrictionUtils;
 
+import com.p404.settings.wifi.tether.WifiTetherClientManagerPreferenceController;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,12 +73,16 @@ public class WifiTetherSettings extends RestrictedDashboardFragment
     static final String KEY_WIFI_TETHER_AUTO_OFF = "wifi_tether_auto_turn_off";
     @VisibleForTesting
     static final String KEY_WIFI_TETHER_NETWORK_AP_BAND = "wifi_tether_network_ap_band";
+    @VisibleForTesting
+    static final String KEY_WIFI_TETHER_CLIENT_MANAGER =
+            WifiTetherClientManagerPreferenceController.PREF_KEY;
 
     private WifiTetherSwitchBarController mSwitchBarController;
     private WifiTetherSSIDPreferenceController mSSIDPreferenceController;
     private WifiTetherPasswordPreferenceController mPasswordPreferenceController;
     private WifiTetherApBandPreferenceController mApBandPreferenceController;
     private WifiTetherSecurityPreferenceController mSecurityPreferenceController;
+    private WifiTetherClientManagerPreferenceController mClientPrefController;
 
     private WifiManager mWifiManager;
     private boolean mRestartWifiApAfterConfigChange;
@@ -135,6 +141,7 @@ public class WifiTetherSettings extends RestrictedDashboardFragment
         mSecurityPreferenceController = use(WifiTetherSecurityPreferenceController.class);
         mPasswordPreferenceController = use(WifiTetherPasswordPreferenceController.class);
         mApBandPreferenceController = use(WifiTetherApBandPreferenceController.class);
+        mClientPrefController = use(WifiTetherClientManagerPreferenceController.class);
     }
 
     @Override
@@ -210,7 +217,7 @@ public class WifiTetherSettings extends RestrictedDashboardFragment
         controllers.add(new WifiTetherApBandPreferenceController(context, listener));
         controllers.add(
                 new WifiTetherAutoOffPreferenceController(context, KEY_WIFI_TETHER_AUTO_OFF));
-
+        controllers.add(new WifiTetherClientManagerPreferenceController(context, listener));
         return controllers;
     }
 
@@ -295,6 +302,7 @@ public class WifiTetherSettings extends RestrictedDashboardFragment
         } else {
             configBuilder.setBand(mApBandPreferenceController.getBandIndex());
         }
+        mClientPrefController.updateConfig(configBuilder);
         return configBuilder.build();
     }
 
@@ -344,6 +352,7 @@ public class WifiTetherSettings extends RestrictedDashboardFragment
                 keys.add(KEY_WIFI_TETHER_NETWORK_PASSWORD);
                 keys.add(KEY_WIFI_TETHER_AUTO_OFF);
                 keys.add(KEY_WIFI_TETHER_NETWORK_AP_BAND);
+                keys.add(KEY_WIFI_TETHER_CLIENT_MANAGER);
             }
 
             // Remove duplicate

@@ -204,20 +204,28 @@
 
     </PreferenceCategory>
 
-    <Preference
-        android:key="app_package_name"
-        android:selectable="false"
-        android:order="9999"
-        settings:controller="com.android.settings.applications.appinfo.AppPackageNamePreferenceController"
-        settings:allowDividerAbove="true"
-        settings:enableCopying="true"/>
+    <!-- App info -->
+    <PreferenceCategory
+        android:key="app_installer"
+        android:title="@string/package_details_group_title"
+        settings:controller="com.android.settings.applications.appinfo.AppInstallerPreferenceCategoryController">
 
-    <Preference
-        android:key="app_version"
-        android:selectable="false"
-        android:order="9999"
-        settings:controller="com.android.settings.applications.appinfo.AppVersionPreferenceController"
-        settings:allowDividerAbove="false"
-        settings:enableCopying="true"/>
+        <Preference
+            android:key="app_version"
+            android:title="@string/package_version"
+            android:selectable="false"
+            android:order="9998"
+            settings:controller="com.android.settings.applications.appinfo.AppVersionPreferenceController"
+            settings:enableCopying="true"/>
+
+        <Preference
+            android:key="app_package_name"
+            android:title="@string/package_name"
+            android:selectable="false"
+            android:order="9999"
+            settings:controller="com.android.settings.applications.appinfo.AppPackageNamePreferenceController"
+            settings:enableCopying="true"/>
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

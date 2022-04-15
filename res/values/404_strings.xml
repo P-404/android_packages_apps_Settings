@@ -139,4 +139,16 @@
     <string name="gesture_navbar_category_title">Navigation bar</string>
     <string name="immersive_navigation_title">Immersive navigation</string>
     <string name="immersive_navigation_summary">Hide the gesture pill and navigation bar padding.</string>
+
+    <!-- Package group title -->
+    <string name="package_details_group_title">Package details</string>
+
+    <!-- Package version -->
+    <string name="package_version">Package version</string>
+
+    <!-- Package details -->
+    <string name="package_name">Package name</string>
+
+    <!-- 404 Package version -->
+    <string name="p404_version_text"><xliff:g id="version_num">%1$s</xliff:g></string>
 </resources>

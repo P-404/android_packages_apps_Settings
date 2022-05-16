@@ -108,7 +108,7 @@ class MaxRefreshRatePreferenceController(
     }
 
     override fun getAvailabilityStatus(): Int =
-        if (mContext.resources.getBoolean(R.bool.config_show_refresh_rate_switch)
+        if (mContext.resources.getBoolean(R.bool.config_show_refresh_rate_controls)
                 && values.size > 1
         ) {
             AVAILABLE

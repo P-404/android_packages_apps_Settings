@@ -151,4 +151,7 @@
     <!-- Battery stats reset -->
     <string name="battery_stats_reset">Reset stats</string>
     <string name="battery_stats_message">Battery history stats are going to be reset</string>
+
+    <!-- Min refresh rate -->
+    <string name="min_refresh_rate_title">Minimum Refresh-Rate</string>
 </resources>

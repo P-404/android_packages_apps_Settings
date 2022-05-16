@@ -36,6 +36,6 @@
     <string name="status_bar_battery_percentage_text_inside">Inside the icon</string>
     <string name="status_bar_battery_percentage_text_next">Next to the icon</string>
 
-    <!-- Whether to show min refresh rate in display settings -->
-    <bool name="config_show_min_refresh_rate_switch">false</bool>
+    <!-- Whether to show min / max refresh rate preference in display settings -->
+    <bool name="config_show_refresh_rate_switch">false</bool>
 </resources>

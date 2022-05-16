@@ -158,6 +158,7 @@
     <string name="show_lockscreen_media_art_title">Show media art</string>
     <string name="lockscreen_media_art_options_title">Lockscreen media art</string>
 
-    <!-- Min refresh rate -->
+    <!-- Min / max refresh rate -->
     <string name="min_refresh_rate_title">Minimum Refresh-Rate</string>
+    <string name="max_refresh_rate_title">Maximum Refresh-Rate</string>
 </resources>

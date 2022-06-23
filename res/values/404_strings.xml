@@ -77,8 +77,8 @@
     <string name="global_actions_advanced_reboot_summary">Show options for recovery and bootloader in power menu</string>
 
     <!-- Settings Reset -->
-    <string name="reset_all_settings">RESET ALL</string>
-    <string name="reset_selected_settings">RESET SELECTED</string>
+    <string name="reset_all_settings">Reset all</string>
+    <string name="reset_selected_settings">Reset selected</string>
     <string name="reset_settings_title">Feature preferences</string>
     <string name="reset_settings_summary">Reset Project 404 feature preferences</string>
     <string name="keywords_settings_reset">reset</string>

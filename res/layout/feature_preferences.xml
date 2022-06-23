@@ -27,8 +27,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_gravity="bottom"
-        android:background="?android:attr/listDivider" />
+        android:layout_gravity="bottom" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -47,6 +46,7 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/reset_all_prefs"
             android:enabled="false"
+            style="@style/ActionPrimaryButton"
             android:text="@string/reset_selected_settings" />
 
         <Button
@@ -60,6 +60,7 @@
             android:layout_marginBottom="24dp"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
+            style="@style/ActionPrimaryButton"
             android:text="@string/reset_all_settings" />
 
     </RelativeLayout>

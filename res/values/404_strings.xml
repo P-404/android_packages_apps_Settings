@@ -91,4 +91,5 @@
     <!-- Hide App -->
     <string name="hide">Hide</string>
     <string name="unhide">Unhide</string>
+    <string name="filter_hidden_apps">Hidden apps</string>
 </resources>

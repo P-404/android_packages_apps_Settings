@@ -2066,6 +2066,9 @@
     <!-- This string asks the user whether or not to allow an app to disable WiFi. [CHAR LIMIT=NONE] -->
     <string name="wifi_ask_disable"><xliff:g id="requester" example="FancyApp">%s</xliff:g> wants to turn off Wi-Fi</string>
 
+    <!-- Summary for the toggle to show the maximize compatibility warning message in dual AP device [CHAR LIMIT=NONE]-->
+    <string name="wifi_hotspot_maximize_compatibility_dual_ap_summary">Helps other devices find this hotspot. Increases battery usage.</string>
+
     <!-- Debugging developer settings: Enable ART verifier for Debuggable Apps [CHAR LIMIT=67] -->
     <string name="art_verifier_for_debuggable_title">Verify bytecode of debuggable apps</string>
     <!-- Debugging developer settings: Enable ART verifier for Debuggable Apps [CHAR LIMIT=NONE] -->
@@ -13773,4 +13776,6 @@
     <string name="nr_sa">SA</string>
     <string name="prefer_vonr_mode_title">Enable/Disable VoNR</string>
     <string name="prefer_vonr_mode_summary">Enable or disable VoNR</string>
+
+    <string name="wifi_hotspot_maximize_compatibility_single_ap_summary">Helps other devices find this hotspot. Reduces hotspot connection speed.</string>
 </resources>

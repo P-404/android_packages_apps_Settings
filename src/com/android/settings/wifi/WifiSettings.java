@@ -190,8 +190,6 @@ public class WifiSettings extends RestrictedSettingsFragment
 
     // Worker thread used for WifiPickerTracker work
     private HandlerThread mWorkerThread;
-    private Handler mMainHandler;
-    private Handler mWorkerHandler;
 
     @VisibleForTesting
     WifiPickerTracker mWifiPickerTracker;
@@ -293,13 +291,11 @@ public class WifiSettings extends RestrictedSettingsFragment
                 return SystemClock.elapsedRealtime();
             }
         };
-
-        mMainHandler = new Handler(Looper.getMainLooper());
-        mWorkerHandler = mWorkerThread.getThreadHandler();
         mWifiPickerTracker = FeatureFactory.getFactory(context)
                 .getWifiTrackerLibProvider()
                 .createWifiPickerTracker(getSettingsLifecycle(), context,
-                        mMainHandler, mWorkerHandler,
+                        new Handler(Looper.getMainLooper()),
+                        mWorkerThread.getThreadHandler(),
                         elapsedRealtimeClock,
                         MAX_SCAN_AGE_MILLIS,
                         SCAN_INTERVAL_MILLIS,
@@ -371,10 +367,6 @@ public class WifiSettings extends RestrictedSettingsFragment
         if (mWifiEnabler != null) {
             mWifiEnabler.teardownSwitchController();
         }
-
-        // remove all msg and callback in main handler and worker handler
-        mMainHandler.removeCallbacksAndMessages(null);
-        mWorkerHandler.removeCallbacksAndMessages(null);
         mWorkerThread.quit();
 
         super.onDestroyView();
@@ -385,7 +377,6 @@ public class WifiSettings extends RestrictedSettingsFragment
         super.onStart();
 
         mWifiEnabler = createWifiEnabler();
-        mWifiManager.allowConnectOnPartialScanResults(true);
 
         if (mIsRestricted) {
             restrictUi();
@@ -440,7 +431,6 @@ public class WifiSettings extends RestrictedSettingsFragment
     public void onStop() {
         getView().removeCallbacks(mUpdateWifiEntryPreferencesRunnable);
         getView().removeCallbacks(mHideProgressBarRunnable);
-        mWifiManager.allowConnectOnPartialScanResults(false);
         mIsWifiEntryListStale = true;
         super.onStop();
     }
@@ -661,7 +651,7 @@ public class WifiSettings extends RestrictedSettingsFragment
     /** Called when the state of Wifi has changed. */
     @Override
     public void onWifiStateChanged() {
-        if (mIsRestricted || isFinishingOrDestroyed()) {
+        if (mIsRestricted) {
             return;
         }
         final int wifiState = mWifiPickerTracker.getWifiState();
@@ -699,12 +689,6 @@ public class WifiSettings extends RestrictedSettingsFragment
 
     @Override
     public void onWifiEntriesChanged() {
-        // do nothing if UI is finishing and destoryed status
-        if (isFinishingOrDestroyed()) {
-            Log.d(TAG, "onWifiEntriesChanged: isFinishingOrDestroyed true");
-            return;
-        }
-
         if (mIsWifiEntryListStale) {
             mIsWifiEntryListStale = false;
             updateWifiEntryPreferences();
@@ -849,10 +833,7 @@ public class WifiSettings extends RestrictedSettingsFragment
             mWifiEntryPreferenceCategory.addPreference(pref);
         } else {
             // Continuing showing progress bar for an additional delay to overlap with animation
-            final View view = getView();
-            if (null != view) {
-                view.postDelayed(mHideProgressBarRunnable, 1700 /* delay millis */);
-            }
+            getView().postDelayed(mHideProgressBarRunnable, 1700 /* delay millis */);
         }
 
         mAddWifiNetworkPreference.setOrder(index++);

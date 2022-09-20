@@ -24,7 +24,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceGroup;
 import androidx.preference.PreferenceScreen;
 
-import com.android.settingslib.wifi.WifiEntryPreference;
+import com.android.settings.wifi.WifiEntryPreference;
 import com.android.settings.core.BasePreferenceController;
 import com.android.wifitrackerlib.WifiEntry;
 

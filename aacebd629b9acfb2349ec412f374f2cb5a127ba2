@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c87dccb_cf13bd2a",
+        "filename": "res/values/404_strings.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-09-22T10:12:45Z",
+      "side": 1,
+      "message": "Spaces, remove them",
+      "revId": "aacebd629b9acfb2349ec412f374f2cb5a127ba2",
+      "serverId": "c85314f7-38ff-4b73-93db-2637f3516207"
+    }
+  ]
+}

@@ -216,6 +216,7 @@ public class WifiTetherSettings extends RestrictedDashboardFragment
             mSwitchBarController.stopTether();
         }
         mWifiManager.setSoftApConfiguration(config);
+        use(WifiTetherAutoOffPreferenceController.class).updateDisplay();
 
         if (bandEntriesChanged)
             mApBandPreferenceController.updateDisplay();

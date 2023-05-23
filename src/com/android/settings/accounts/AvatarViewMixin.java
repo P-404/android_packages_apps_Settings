@@ -26,6 +26,7 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.UserManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
@@ -37,6 +38,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.OnLifecycleEvent;
 
 import com.android.settings.R;
+import com.android.settings.Settings;
 import com.android.settings.activityembedding.ActivityEmbeddingRulesController;
 import com.android.settings.homepage.SettingsHomepageActivity;
 import com.android.settings.overlay.FeatureFactory;
@@ -68,6 +70,7 @@ public class AvatarViewMixin implements LifecycleObserver {
 
     @VisibleForTesting
     String mAccountName;
+    String uri;
 
     /**
      * @return true if the avatar icon is supported.
@@ -85,13 +88,17 @@ public class AvatarViewMixin implements LifecycleObserver {
         mAvatarView = avatarView;
         mAvatarView.setOnClickListener(v -> {
             Intent intent;
-            try {
-                final String uri = mContext.getResources().getString(
+            uri = mContext.getResources().getString(
                         R.string.config_account_intent_uri);
-                intent = Intent.parseUri(uri, Intent.URI_INTENT_SCHEME);
-            } catch (URISyntaxException e) {
-                Log.w(TAG, "Error parsing avatar mixin intent, skipping", e);
-                return;
+            if (TextUtils.isEmpty(uri)) {
+                intent = new Intent(mContext, Settings.UserSettingsActivity.class);
+            } else {
+                try {
+                    intent = Intent.parseUri(uri, Intent.URI_INTENT_SCHEME);
+                } catch (URISyntaxException e) {
+                    Log.w(TAG, "Error parsing avatar mixin intent, skipping", e);
+                    return;
+                }
             }
 
             if (!TextUtils.isEmpty(mAccountName)) {
@@ -137,8 +144,7 @@ public class AvatarViewMixin implements LifecycleObserver {
         if (hasAccount()) {
             loadAccount();
         } else {
-            mAccountName = null;
-            mAvatarView.setImageResource(R.drawable.ic_account_circle_24dp);
+            loadLocalAccount();
         }
     }
 
@@ -147,6 +153,20 @@ public class AvatarViewMixin implements LifecycleObserver {
         final Account accounts[] = FeatureFactory.getFactory(
                 mContext).getAccountFeatureProvider().getAccounts(mContext);
         return (accounts != null) && (accounts.length > 0);
+    }
+
+    private void loadLocalAccount() {
+        final UserManager um = UserManager.get(mContext);
+        final Bitmap bitmap = um.getUserIcon();
+        mAccountName = um.getUserName();
+        if (TextUtils.isEmpty(mAccountName)) {
+            mAccountName = null;
+        }
+        if (bitmap != null) {
+            mAvatarView.setImageBitmap(bitmap);
+        } else {
+            mAvatarView.setImageResource(R.drawable.ic_account_circle_24dp);
+        }
     }
 
     private void loadAccount() {

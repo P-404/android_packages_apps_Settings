@@ -85,4 +85,7 @@
     <!-- Torch Power button gestures -->
     <string name="power_button_torch_title">Quick torch</string>
     <string name="power_button_torch_summary">When the screen is off, long-pressing power button will enable torch</string>
+
+    <!-- Battery Health -->
+    <string name="title_battery_health_status">Battery Health Status</string>
 </resources>

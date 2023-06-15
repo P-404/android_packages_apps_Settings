@@ -38,6 +38,12 @@
         android:title="@string/summary_placeholder"
         settings:controller="com.android.settings.fuelgauge.batterytip.BatteryTipPreferenceController" />
 
+    <!-- Battery Health -->
+    <Preference
+        android:key="battery_health"
+        android:title="@string/title_battery_health_status"
+        android:fragment="com.android.settings.fuelgauge.BatteryHealthStatus"/>
+
     <Preference
         android:fragment="com.android.settings.fuelgauge.batteryusage.PowerUsageAdvanced"
         android:key="battery_usage_summary"

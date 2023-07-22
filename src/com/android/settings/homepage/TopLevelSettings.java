@@ -346,7 +346,7 @@ public class TopLevelSettings extends DashboardFragment implements SplitLayoutLi
             if (preference == null) {
                 break;
             }
-            job.doForEach(preference);
+            //job.doForEach(preference);
         }
     }
 
